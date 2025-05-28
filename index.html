@@ -1,4 +1,4 @@
-<!-- Skript erstellt von Aaron Tholl in Visual Studio Code, Stand 2025-05-21 -->
+<!-- Skript erstellt von Aaron Tholl in Visual Studio Code, Stand 2025-05-28 -->
 
 <!DOCTYPE html>
 <html lang="de">
@@ -32,13 +32,19 @@
         .hide {
             display: none !important;
         }
+        #quiz-info {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <h1>Pflanzen des Universitätscampus Konstanz</h1>
     <h2>Arten aus dem Geländepraktikum 2025</h2>
-    <p>Nenne den Deutschen <u><span style="font-variant: small-caps;">oder</span></u> den wissenschaftlichen Namen der folgenden Pflanzenarten sowie die dazugehörige Pflanzenfamilie.<br>
-    Am Ende des Quiz kannst du die Gesamtanzahl der korrekt bestimmten Pflanzen sehen.<br><br>
+    <p>Nenne den wissenschaftlichen <b><span style="font-variant: small-caps;">oder</span></b> den deutschen Namen der folgenden Pflanzenarten sowie die dazugehörige Pflanzenfamilie.<br>
+    Das Quiz ist in Runden mit jeweils 20 Pflanzenarten aufgeteilt. Am Ende jeder Runde kannst du die Anzahl der korrekt bestimmten Pflanzen sehen.<br><br>
     <i>Taxonomie nach <a href="https://biologie.uni-konstanz.de/doerken/">Prof. Dr. Veit Martin Dörken</a> (Universität Konstanz) und dem <a href="https://www.floraweb.de/">Bundesamt für Naturschutz (BfN)</a>, Bilder von verschiedenen Urhebern auf <a href="https://www.pflanzenlernen.de/">Planta Go Lingo</a>.<br>
     Abweichende taxonomische Konzepte und Trivialnamen werden nicht berücksichtigt, diese können auf den genannten Websites eingesehen werden.<br>
     Weitere Bilder sowie Bestimmungsmerkmale findest du auf <a href="https://www.blumeninschwaben.de/">Flora-de</a>.</i></p>
@@ -46,16 +52,20 @@
     <div id="pagination-top" style="margin-bottom: 20px;"></div>
 
     <!-- Button zum Mischen der Pflanzen -->
-    <button onclick="shufflePlants()">Reihenfolge zufällig neu anordnen</button>
+    <button id="shuffle-btn" onclick="shufflePlants()">Reihenfolge zufällig neu anordnen</button>
     <br><br>
 
     <div id="quiz-container"></div>
-
     <br><br>
-    <button onclick="checkAnswers()">[Enter] Alle Eingaben überprüfen</button>
+
+    <!-- Button zum Überprüfen aller Eingaben -->
+    <button id="check-btn" onclick="checkAnswers()">[Enter] Alle Eingaben überprüfen</button>
 
     <div id="pagination" style="margin-top: 20px;"></div>
     <div class="result" id="result"></div>
+    <div id="quiz-info">
+        Zuletzt aktualisiert: 2025-05-28 &nbsp;|&nbsp; Anzahl Runden: <span id="round-count"></span>
+    </div>
     <script>
         const plants = [
             {
@@ -845,8 +855,39 @@
         ]
 
         const plantsPerPage = 5;
+        const plantsPerRound = 20; // Pflanzen pro Runde
         let currentPage = 0;
+        let currentRound = 0; // Aktuelle Runde
         let inputValues = {};
+
+        function getCurrentRoundPlants() {
+            const start = currentRound * plantsPerRound;
+            const end = Math.min(start + plantsPerRound, plants.length);
+            return plants.slice(start, end);
+        }
+
+        // Berechnung der Levenshtein-Distanz
+        function levenshtein(a, b) {
+            if (a.length === 0) return b.length;
+            if (b.length === 0) return a.length;
+            const matrix = [];
+            for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+            for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+            for (let i = 1; i <= b.length; i++) {
+                for (let j = 1; j <= a.length; j++) {
+                    if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                        matrix[i][j] = matrix[i - 1][j - 1];
+                    } else {
+                        matrix[i][j] = Math.min(
+                            matrix[i - 1][j - 1] + 1, // ersetzen
+                            matrix[i][j - 1] + 1,     // einfügen
+                            matrix[i - 1][j] + 1      // löschen
+                        );
+                    }
+                }
+            }
+            return matrix[b.length][a.length];
+        }
 
         function checkSingleAnswer(index) {
             const plant = plants[index];
@@ -862,9 +903,7 @@
             const germanValue = normalize(germanInput.value);
             const familyValue = normalize(familyInput.value);
 
-            let resultText = '';
-
-            // Prüfen, ob entweder wissenschaftlicher Name + Familie oder Deutscher Name + Familie korrekt sind
+            // Prüfen, ob entweder wissenschaftlicher Name + Familie oder deutscher Name + Familie korrekt sind
             const isScientificCorrect =
                 scientificValue === normalize(plant.scientific) &&
                 (familyValue === normalize(plant.family) || plant.family_german.map(normalize).includes(familyValue));
@@ -872,19 +911,39 @@
                 germanValue === normalize(plant.german) &&
                 (familyValue === normalize(plant.family) || plant.family_german.map(normalize).includes(familyValue));
 
+            let resultText = '';
             if (isScientificCorrect || isGermanCorrect) {
                 resultText = '✅ Richtig!';
             } else {
-                resultText = `❌ Falsch! Richtig wäre: <i>${plant.scientific}</i> (${plant.german}), ${plant.family} (${plant.family_german.join(', ')})`;
+                // Unscharfe Prüfung für Tippfehler (max. 2 Zeichen Unterschied)
+                const closeScientific = levenshtein(scientificValue, normalize(plant.scientific)) <= 2;
+                const closeGerman = levenshtein(germanValue, normalize(plant.german)) <= 2;
+                const closeFamily = (
+                    levenshtein(familyValue, normalize(plant.family)) <= 2 ||
+                    plant.family_german.some(fam => levenshtein(familyValue, normalize(fam)) <= 2)
+                );
+                if (
+                    (scientificValue && closeScientific && (familyValue && closeFamily)) ||
+                    (germanValue && closeGerman && (familyValue && closeFamily))
+                ) {
+                    resultText = '⚠️ Fast richtig (Tippfehler?)';
+                } else {
+                    resultText = `❌ Falsch! Richtig wäre: <i>${plant.scientific}</i> (${plant.german}), ${plant.family} (${plant.family_german.join(', ')})`;
+                }
             }
 
-            // Ergebnis speichern
-            inputValues[`scientific-${index}`] = scientificInput.value;
-            inputValues[`german-${index}`] = germanInput.value;
-            inputValues[`family-${index}`] = familyInput.value;
-            inputValues[`result-${index}`] = resultText;
+            // Speichern, wenn mindestens ein Feld ausgefüllt ist
+            if (
+                scientificInput.value.trim() !== '' ||
+                germanInput.value.trim() !== '' ||
+                familyInput.value.trim() !== ''
+            ) {
+                inputValues[`scientific-${index}`] = scientificInput.value;
+                inputValues[`german-${index}`] = germanInput.value;
+                inputValues[`family-${index}`] = familyInput.value;
+                inputValues[`result-${index}`] = resultText;
+            }
 
-            // Ergebnis anzeigen
             document.getElementById(`result-${index}`).innerHTML = resultText;
         }
 
@@ -892,54 +951,111 @@
             const container = document.getElementById('quiz-container');
             container.innerHTML = '';
 
+            const roundPlants = getCurrentRoundPlants();
             const startIndex = currentPage * plantsPerPage;
-            const endIndex = Math.min(startIndex + plantsPerPage, plants.length);
+            const endIndex = Math.min(startIndex + plantsPerPage, roundPlants.length);
 
-            if (startIndex >= plants.length) {
-                // Nach der letzten Seite: Zusammenfassung anzeigen
-                const correctAnswers = calculateCorrectAnswers();
+            if (startIndex >= roundPlants.length) {
+                // Nach der letzten Seite der Runde: Zusammenfassung für diese Runde anzeigen
+                const correctAnswers = calculateCorrectAnswersForRound();
+                const isLastRound = (currentRound + 1) * plantsPerRound >= plants.length;
+                const correctTotal = calculateCorrectAnswers();
+
+                let headline = `Zwischenstand Runde ${currentRound + 1}`;
+                let shareButton = '';
+                if (isLastRound) {
+                    headline += ' und Gesamtauswertung';
+                    shareButton = `<button id="share-btn" style="margin-left:10px;">Ergebnis teilen</button>`;
+                }
+
                 container.innerHTML = `
                     <br>
-                    <h2>Zusammenfassung</h2>
-                    <p>Du hast insgesamt <strong>${correctAnswers}</strong> von <strong>${plants.length}</strong> Pflanzen korrekt identifiziert.</p>
-                    <button onclick="restartQuiz()">Quiz neu starten</button>
+                    <h2>${headline}</h2>
+                    <p>Du hast in dieser Runde <strong>${correctAnswers}</strong> von <strong>${roundPlants.length}</strong> Pflanzen korrekt identifiziert.</p>
+                    <p>Gesamt korrekt: <strong>${correctTotal}</strong> von <strong>${plants.length}</strong>${shareButton}</p>
+                    <button onclick="prevRound()">Zurück [←]</button>
+                    ${((currentRound + 1) * plantsPerRound < plants.length)
+                        ? `<button onclick="nextRound()">[→] Nächste Runde starten</button>`
+                        : `<button onclick="restartQuiz()">Quiz neu starten</button>`}
                     <br><br><br>
+                    <div style="height:141px"></div>
                 `;
+
+                // Teilen-Button Funktionalität (Web Share API oder Fallback)
+                if (isLastRound) {
+                    setTimeout(() => {
+                        const shareBtn = document.getElementById('share-btn');
+                        if (shareBtn) {
+                            shareBtn.onclick = function() {
+                                const text = `Mein Ergebnis beim Pflanzenquiz: ${correctTotal} von ${plants.length} Pflanzen korrekt!`;
+                                if (navigator.share) {
+                                    navigator.share({
+                                        title: 'Pflanzenquiz Ergebnis',
+                                        text: text,
+                                        url: window.location.href
+                                    });
+                                } else {
+                                    // Fallback: Ergebnis in die Zwischenablage kopieren
+                                    navigator.clipboard.writeText(text + ' ' + window.location.href);
+                                    shareBtn.textContent = 'In die Zwischenablage kopiert!';
+                                    setTimeout(() => shareBtn.textContent = 'Ergebnis teilen', 2000);
+                                }
+                            };
+                        }
+                    }, 0);
+                }
+
+                // Buttons ausblenden
+                const shuffleBtn = document.getElementById('shuffle-btn');
+                const checkBtn = document.getElementById('check-btn');
+                if (shuffleBtn) shuffleBtn.style.display = 'none';
+                if (checkBtn) checkBtn.style.display = 'none';
+
                 updatePaginationButtons();
                 return;
             }
 
             for (let i = startIndex; i < endIndex; i++) {
-                const plant = plants[i];
+                const plantIndex = currentRound * plantsPerRound + i;
+                const plant = plants[plantIndex];
                 const plantDiv = document.createElement('div');
                 plantDiv.className = 'question';
                 plantDiv.innerHTML = `
                     <br>
-                    <h3>Pflanze ${i + 1}</h3>
+                    <h3>Pflanze ${plantIndex + 1}</h3>
                     <div>
                         ${plant.images.map(img => `<img src="images/${img}" alt="${plant.scientific}" width="200">`).join('')}
                     </div>
-                    <label class="input-label">Wiss.: <span style="display:inline-block; width: 0px;"> </span><input type="text" id="scientific-${i}" value="${inputValues[`scientific-${i}`] || ''}"></label>
-                    <label class="input-label">Dt.: <span style="display:inline-block; width: 19px;"> </span><input type="text" id="german-${i}" value="${inputValues[`german-${i}`] || ''}"></label>
-                    <label class="input-label">Fam.: <span style="display:inline-block; width: 3px;"> </span><input type="text" id="family-${i}" value="${inputValues[`family-${i}`] || ''}"></label>
+                    <label class="input-label">Wiss.: <span style="display:inline-block; width: 0px;"></span> <input type="text" id="scientific-${plantIndex}" value="${inputValues[`scientific-${plantIndex}`] || ''}"></label>
+                    <label class="input-label">Dt.: <span style="display:inline-block; width: 19px;"></span> <input type="text" id="german-${plantIndex}" value="${inputValues[`german-${plantIndex}`] || ''}"></label>
+                    <label class="input-label">Fam.: <span style="display:inline-block; width: 3px;"></span> <input type="text" id="family-${plantIndex}" value="${inputValues[`family-${plantIndex}`] || ''}"></label>
                     <br>
-                    <button onclick="checkSingleAnswer(${i})">Antwort überprüfen</button>
-                    <div class="result" id="result-${i}">${inputValues[`result-${i}`] || ''}</div>
+                    <button onclick="checkSingleAnswer(${plantIndex})">Antwort überprüfen</button>
+                    <div class="result" id="result-${plantIndex}">${inputValues[`result-${plantIndex}`] || ''}</div>
                 `;
                 container.appendChild(plantDiv);
             }
 
             updatePaginationButtons();
+
+            const shuffleBtn = document.getElementById('shuffle-btn');
+            const checkBtn = document.getElementById('check-btn');
+            const isSummary = currentPage * plantsPerPage >= roundPlants.length;
+            if (shuffleBtn) shuffleBtn.style.display = isSummary ? 'none' : 'inline-block';
+            if (checkBtn) checkBtn.style.display = isSummary ? 'none' : 'inline-block';
+
+            updateQuizInfo();
         }
 
-        function calculateCorrectAnswers() {
+        function calculateCorrectAnswersForRound() {
             let correctCount = 0;
-            plants.forEach((plant, index) => {
-                const scientificValue = inputValues[`scientific-${index}`]?.trim().toLowerCase() || '';
-                const germanValue = inputValues[`german-${index}`]?.trim().toLowerCase() || '';
-                const familyValue = inputValues[`family-${index}`]?.trim().toLowerCase() || '';
+            const roundPlants = getCurrentRoundPlants();
+            roundPlants.forEach((plant, i) => {
+                const plantIndex = currentRound * plantsPerRound + i;
+                const scientificValue = inputValues[`scientific-${plantIndex}`]?.trim().toLowerCase() || '';
+                const germanValue = inputValues[`german-${plantIndex}`]?.trim().toLowerCase() || '';
+                const familyValue = inputValues[`family-${plantIndex}`]?.trim().toLowerCase() || '';
 
-                // Auch deutscher Familienname wird akzeptiert!
                 const isFamilyCorrect =
                     familyValue === plant.family.toLowerCase() ||
                     (plant.family_german && plant.family_german.map(f => f.toLowerCase()).includes(familyValue));
@@ -954,8 +1070,43 @@
             return correctCount;
         }
 
+        function calculateCorrectAnswers() {
+            let correctCount = 0;
+            plants.forEach((plant, index) => {
+                const scientificValue = inputValues[`scientific-${index}`]?.trim().toLowerCase() || '';
+                const germanValue = inputValues[`german-${index}`]?.trim().toLowerCase() || '';
+                const familyValue = inputValues[`family-${index}`]?.trim().toLowerCase() || '';
+
+                const isFamilyCorrect =
+                    familyValue === plant.family.toLowerCase() ||
+                    (plant.family_german && plant.family_german.map(f => f.toLowerCase()).includes(familyValue));
+
+                const isScientificCorrect = scientificValue === plant.scientific.toLowerCase() && isFamilyCorrect;
+                const isGermanCorrect = germanValue === plant.german.toLowerCase() && isFamilyCorrect;
+
+                if (isScientificCorrect || isGermanCorrect) {
+                    correctCount++;
+                }
+            });
+            return correctCount;
+        }
+
+        function nextRound() {
+            currentRound++;
+            currentPage = 0;
+            loadQuiz();
+        }
+
+        function prevRound() {
+            const roundPlants = getCurrentRoundPlants();
+            const totalPages = Math.ceil(roundPlants.length / plantsPerPage);
+            currentPage = totalPages - 1;
+            loadQuiz();
+        }
+
         function restartQuiz() {
             currentPage = 0;
+            currentRound = 0;
             inputValues = {};
             loadQuiz();
         }
@@ -967,27 +1118,31 @@
             paginationContainer.innerHTML = '';
             paginationTopContainer.innerHTML = '';
 
-            const totalPages = Math.ceil(plants.length / plantsPerPage);
+            const roundPlants = getCurrentRoundPlants();
+            const totalPages = Math.ceil(roundPlants.length / plantsPerPage);
 
-            // Prüfen, ob wir auf der Zusammenfassungsseite sind
-            const isSummary = currentPage * plantsPerPage >= plants.length;
+            const isSummary = currentPage * plantsPerPage >= roundPlants.length;
 
-            // "Zurück"-Button immer anzeigen, außer auf der ersten Seite
-            if (currentPage > 0) {
+            // Ab Runde 2 führt der "Zurück"-Button auf Seite 1 der Runde zur Zusammenfassung der vorherigen Runde
+            if ((currentPage > 0 && !isSummary) || (currentPage === 0 && currentRound > 0 && !isSummary)) {
                 const prevButton = document.createElement('button');
                 prevButton.textContent = 'Zurück [←]';
                 prevButton.onclick = () => {
-                    currentPage--;
-                    loadQuiz();
+                    if (currentPage === 0 && currentRound > 0) {
+                        currentRound--;
+                        const prevRoundPlants = getCurrentRoundPlants();
+                        currentPage = Math.ceil(prevRoundPlants.length / plantsPerPage);
+                        loadQuiz();
+                    } else {
+                        currentPage--;
+                        loadQuiz();
+                    }
                 };
                 paginationContainer.appendChild(prevButton);
 
                 const prevButtonTop = document.createElement('button');
                 prevButtonTop.textContent = 'Zurück [←]';
-                prevButtonTop.onclick = () => {
-                    currentPage--;
-                    loadQuiz();
-                };
+                prevButtonTop.onclick = prevButton.onclick;
                 paginationTopContainer.appendChild(prevButtonTop);
             }
 
@@ -995,11 +1150,10 @@
             const pageInfo = document.createElement('span');
             pageInfo.className = 'page-info' + (isSummary ? ' hide' : '');
             pageInfo.style.margin = '0 12px';
-            pageInfo.textContent = `SEITE ${Math.min(currentPage + 1, totalPages)}/${totalPages}`;
+            pageInfo.textContent = `Seite ${Math.min(currentPage + 1, totalPages)} von ${totalPages} (Runde ${currentRound + 1})`;
             paginationContainer.appendChild(pageInfo.cloneNode(true));
             paginationTopContainer.appendChild(pageInfo);
 
-            // Schaltfläche "Weiter" nur anzeigen, wenn es nicht die letzte Seite ist und nicht auf der Zusammenfassung
             if (currentPage < totalPages && !isSummary) {
                 const nextButton = document.createElement('button');
                 if (currentPage === totalPages - 1) {
@@ -1035,15 +1189,23 @@
 
                 if (!scientificInput || !germanInput || !familyInput) return;
 
+                // Prüfen, ob mindestens ein Feld ausgefüllt ist
+                if (
+                    scientificInput.value.trim() === '' &&
+                    germanInput.value.trim() === '' &&
+                    familyInput.value.trim() === ''
+                ) {
+                    // Falls alle Felder leer sind, nichts tun (auch keine Markierung anzeigen)
+                    return;
+                }
+                
                 // Eingaben normalisieren (Kleinbuchstaben und Leerzeichen entfernen)
                 const normalize = (str) => str.trim().toLowerCase();
                 const scientificValue = normalize(scientificInput.value);
                 const germanValue = normalize(germanInput.value);
                 const familyValue = normalize(familyInput.value);
 
-                let resultText = '';
-
-                // Prüfen, ob entweder wissenschaftlicher Name + Familie oder Deutscher Name + Familie korrekt sind
+                // Prüfen, ob entweder wissenschaftlicher Name + Familie oder deutscher Name + Familie korrekt sind
                 const isScientificCorrect =
                     scientificValue === normalize(plant.scientific) &&
                     (familyValue === normalize(plant.family) || plant.family_german.map(normalize).includes(familyValue));
@@ -1051,10 +1213,40 @@
                     germanValue === normalize(plant.german) &&
                     (familyValue === normalize(plant.family) || plant.family_german.map(normalize).includes(familyValue));
 
+                let resultText = '';
                 if (isScientificCorrect || isGermanCorrect) {
                     resultText = '✅ Richtig!';
                 } else {
-                    resultText = `❌ Falsch! Richtig wäre: <i>${plant.scientific}</i> (${plant.german}), ${plant.family} (${plant.family_german.join(', ')})`;
+                    // Unscharfe Prüfung für Tippfehler (max. 2 Zeichen Unterschied)
+                    const closeScientific = levenshtein(scientificValue, normalize(plant.scientific)) <= 2;
+                    const closeGerman = levenshtein(germanValue, normalize(plant.german)) <= 2;
+                    const closeFamily = (
+                        levenshtein(familyValue, normalize(plant.family)) <= 2 ||
+                        plant.family_german.some(fam => levenshtein(familyValue, normalize(fam)) <= 2)
+                    );
+                    if (
+                        (scientificValue && closeScientific && (familyValue && closeFamily)) ||
+                        (germanValue && closeGerman && (familyValue && closeFamily))
+                    ) {
+                        resultText = '⚠️ Fast richtig (Tippfehler?)';
+                    } else {
+                        resultText = `❌ Falsch! Richtig wäre: <i>${plant.scientific}</i> (${plant.german}), ${plant.family} (${plant.family_german.join(', ')})`;
+                    }
+                }
+
+                // Speichern, wenn mindestens ein Feld ausgefüllt ist
+                if (
+                    scientificInput.value.trim() !== '' ||
+                    germanInput.value.trim() !== '' ||
+                    familyInput.value.trim() !== ''
+                ) {
+                    inputValues[`scientific-${index}`] = scientificInput.value;
+                    inputValues[`german-${index}`] = germanInput.value;
+                    inputValues[`family-${index}`] = familyInput.value;
+                    inputValues[`result-${index}`] = resultText;
+                } else {
+                    // Ergebnis zurücksetzen, falls leer
+                    inputValues[`result-${index}`] = '';
                 }
 
                 document.getElementById(`result-${index}`).innerHTML = resultText;
@@ -1074,33 +1266,55 @@
                 const j = Math.floor(Math.random() * (i + 1));
                 [plants[i], plants[j]] = [plants[j], plants[i]];
             }
+            // Eingaben und Ergebnisse zurücksetzen
+            inputValues = {};
             currentPage = 0;
+            currentRound = 0;
             loadQuiz();
         }
 
+        function updateQuizInfo() {
+            const roundCount = Math.ceil(plants.length / plantsPerRound);
+            document.getElementById('round-count').textContent = roundCount;
+        }
+
         document.addEventListener('keydown', function(event) {
-            // Prüfen, ob der Fokus auf einem Eingabefeld liegt
             const active = document.activeElement;
             const isInput = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA');
 
             if (isInput) {
-                // Wenn im Eingabefeld, keine Seitenwechsel mit Pfeiltasten erlauben
                 if (event.code === 'ArrowRight' || event.code === 'ArrowLeft') {
                     return;
                 }
             }
 
-            if (event.code === 'Enter') { // Bestätigen der Eingaben mit der Eingabe-Taste
+            if (event.code === 'Enter') {
                 checkAnswers();
-            } else if (event.code === 'ArrowRight') { // Rechte Pfeiltaste blättert zur nächsten Seite
-                const totalPages = Math.ceil(plants.length / plantsPerPage);
-                if (currentPage < totalPages) {
+            } else if (event.code === 'ArrowRight') {
+                const roundPlants = getCurrentRoundPlants();
+                const totalPages = Math.ceil(roundPlants.length / plantsPerPage);
+                const isSummary = currentPage * plantsPerPage >= roundPlants.length;
+
+                if (isSummary) {
+                    if ((currentRound + 1) * plantsPerRound < plants.length) {
+                        nextRound();
+                    }
+                } else if (currentPage < totalPages) {
                     saveInputValues();
                     currentPage++;
                     loadQuiz();
                 }
-            } else if (event.code === 'ArrowLeft') { // Linke Pfeiltaste blättert zur vorherigen Seite
-                if (currentPage > 0) {
+            } else if (event.code === 'ArrowLeft') {
+                const roundPlants = getCurrentRoundPlants();
+                const isSummary = currentPage * plantsPerPage >= roundPlants.length;
+                if (!isSummary && currentPage === 0 && currentRound > 0) {
+                    currentRound--;
+                    const prevRoundPlants = getCurrentRoundPlants();
+                    currentPage = Math.ceil(prevRoundPlants.length / plantsPerPage);
+                    loadQuiz();
+                } else if (isSummary && currentRound > 0) {
+                    prevRound();
+                } else if (currentPage > 0) {
                     saveInputValues();
                     currentPage--;
                     loadQuiz();

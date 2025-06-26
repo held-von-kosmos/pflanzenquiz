@@ -1,2876 +1,1373 @@
-<!-- Skript erstellt von Aaron Tholl in Visual Studio Code, Stand 2025-06-05 -->
+<!-- Skript erstellt von Aaron Tholl in Visual Studio Code, Stand 2025-06-26 -->
 
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🌱 Pflanzen des Universitätscampus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Build-Datum als Meta-Tag für Versionsinfo -->
+    <meta name="build-date" content="2025-06-24">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: system-ui, Arial, sans-serif;
+            margin: 0;
+            background: #f7f7f7;
         }
-        img {
+        .banner {
+            background: #e0f2e9;
+            border-bottom: 2px solid #b2dfdb;
+            padding: 1em 2em 1em 2em;
+            z-index: 10;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+        .banner-toggle {
+            background: #b2dfdb;
+            border: none;
+            border-radius: 4px;
+            padding: 0.6em 1em;
+            cursor: pointer;
+            font-size: 0.85em;
+            margin-top: 3px;
+            margin-left: 6px;
+        }
+        .banner-text {
+            margin-top: 58px;
+            margin-bottom: 20px;
+        }
+        .version-info {
+            font-size: 0.85em;
+            white-space: nowrap;
+            margin-top: 3px;
+            margin-right: 6px;
+        }
+        #versionInfoFixed {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 30;
+            background: #b2dfdb;
+            padding: 0em 1em;
+            border-radius: 4px;
+            line-height: 2.2em;
+            height: 2.4em;
+            display: flex;
+            align-items: center;
+        }
+        #bannerToggle {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 20;
+            display: block;
+        }
+        #showBannerBtn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 20;
+            display: block;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 13px auto 13px auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px #0001;
+            padding: 2em;
+        }
+        h1 {
+            margin-top: 0;
+        }
+        h2 {
+            font-size: 1.25em;
+        }
+        .quiz-controls {
+            display: flex;
+            gap: 1em;
+            margin-bottom: 0;
+            flex-wrap: wrap;
+            margin-bottom: 2px;
+        }
+        .quiz-controls label {
+            font-weight: 500;
+        }
+        .quiz-controls label span.sort-label,
+        .quiz-controls label span.sort-label-list {
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+        .quiz-controls select option {
+            font-variant: small-caps;
+        }
+        .quiz-controls select,
+        .quiz-controls button {
+            padding: 0.3em 0.7em;
+            font-size: 0.85em;
+        }
+        .quiz-page {
+            display: flex;
+            flex-direction: column;
+            gap: 2em;
+        }
+        .plant-card {
+            background: #f1f8e9;
+            border-radius: 6px;
+            padding: 1em 1.5em;
+            box-shadow: 0 1px 4px #0001;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7em;
+            font-size: 1em;
+            margin-bottom: 2px;
+        }
+        .plant-images {
+            display: flex;
+            gap: 1em;
+            flex-wrap: wrap;
+        }
+        .plant-images img {
             height: 300px;
             width: auto;
+            max-width: 100%;
+            border-radius: 4px;
+            border: 1px solid #b2dfdb;
+            background: #fff;
+            object-fit: contain;
+            aspect-ratio: auto;
         }
-        .question {
-            margin-bottom: 20px;
+        .inputs-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1em;
+            justify-content: flex-start;
+            position: relative;
+        }
+        .inputs-row input {
+            padding: 0.4em;
+            font-size: 0.85em;
+            border: 1px solid #b2dfdb;
+            border-radius: 4px;
+        }
+        .solution-btn {
+            margin-top: 0;
+            margin-left: auto;
+            background: #b2dfdb;
+            border: none;
+            border-radius: 4px;
+            padding: 0.4em 1em;
+            cursor: pointer;
+            height: 2.4em;
+            align-self: center;
+        }
+        .feedback {
+            margin-top: 0.25em;
+            font-weight: 500;
             font-size: 0.9em;
         }
-        .result {
-            margin-top: 20px;
-            font-weight: normal;
+        .solution {
+            margin-top: 0.25em;
+            font-size: 0.9em;
         }
-        .input-label {
+        .nav-row {
             display: block;
-            margin-top: 10px;
+            position: relative;
+            align-items: center;
+            text-align: center;
+            justify-content: space-between;
+            margin-top: 32px;
+            margin-bottom: 12px;
+        }
+        .nav-row .nav-btn {
+            position: absolute;
+            min-width: 90px;
+        }
+        .nav-row .page-info {
+            flex: 1 1 auto;
+            margin: 0 1em;
+            text-align: center;
+        }
+        .nav-row .nav-btn#backBtn,
+        .nav-row .nav-btn#backBtnTop,
+        .nav-row .nav-btn#backToQuizBtn {
+            left: 0;
+        }
+        .nav-row .nav-btn#nextBtn,
+        .nav-row .nav-btn#nextBtnTop,
+        .nav-row .nav-btn#restartBtn {
+            right: 0;
+        }
+        .nav-btn {
+            background: #b2dfdb;
+            border: none;
+            border-radius: 4px;
+            padding: 0.5em 1.2em;
+            font-size: 0.85em;
+            cursor: pointer;
+        }
+        .nav-btn:disabled {
+            background: #e0e0e0;
+            color: #aaa;
+            cursor: not-allowed;
         }
         .page-info {
-            background: #fff;
-            border: 1px solid #bbb;
+            font-size: 0.9em;
+        }
+        .stand-box {
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+            border-radius: 6px;
+            padding: 1.2em 2em;
+            text-align: center;
+            font-size: 1em;
+            margin-top: 42px;
+        }
+        .overview-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 44px;
+            font-size: 0.85em;
+        }
+        .overview-table th,
+        .overview-table td {
+            border: 1px solid #b2dfdb;
+            padding: 0.5em 0.7em;
+            text-align: left;
+        }
+        .overview-table th {
+            background: #e0f2e9;
+        }
+        .overview-table tr:nth-child(even) {
+            background: #f7f7f7;
+        }
+        .share-info {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e8f5e9;
+            border: 1px solid #b2dfdb;
             border-radius: 4px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-            padding: 2.5px 7.5px;
-            font-size: 0.8em;
-            margin: 0 4px;
-            display: inline-block;
-        }
-        .hide {
-            display: none !important;
-        }
-        .copied-flash {
-            animation: flash-bg 1.5s;
-        }
-        @keyframes flash-bg {
-            0%   { background: #ffefe0; }
-            70%  { background: #ffefe0; }
-            100% { background: transparent; }
-        }
-        .active-sort {
-            background: #e0ffe0;
-            border-color: #21c36b;
-            color: #15653a;
-            border-radius: 4px;
-        }
-        #summary-container {
-            padding-left: 2.5vw;
-        }
-        #summary-container p {
-            margin-top: 5px;
-            margin-bottom: 5px;
-        }
-        #quiz-info {
-            position: fixed;
-            top: 0;
-            right: 0;
-            z-index: 999;
-            padding: 2.5px 10px 2.5px 10px;
-            margin: 0;
-            background: #fff;
-            border: 1px solid #bbb;
-            border-radius: 0 0 0 6px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-            font-size: 0.8em;
-            text-align: right;
-        }
-        #intro-text.collapsed {
-            max-height: 0;
-            opacity: 0;
-            pointer-events: none;
-        }
-        #intro-text {
-            max-height: 1000px;
+            padding: 0.2em 1em;
+            font-size: 0.75em;
+            color: #388e3c;
+            box-shadow: 0 2px 8px #0001;
+            z-index: 100;
+            transition: opacity 0.5s;
             opacity: 1;
-            margin-top: 30px;
-            margin-bottom: 15px;
+            text-align: center;
+            min-width: 120px;
         }
-        #toggle-intro-btn {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 999;
-            padding: 2.5px 10px 2.5px 10px;
-            margin: 0;
-            background: #fff;
-            border: 1px solid #bbb;
-            border-radius: 0 0 6px 0;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-            font-size: 0.8em;
+        .scientific-name {
+            font-style: italic;
+        }
+        .scientific-name .no-italic {
+            font-style: normal !important;
+            font-family: inherit !important;
+        }
+        .mobile-hyphen { 
+            display: none; 
+        }
+        .mobile-break { 
+            display: none; 
         }
         @media (max-width: 700px) {
-            #toggle-intro-btn {
-                position: static;
-                display: block;
-                width: fit-content;
-                margin: 8px 0 0 auto;
-                border-radius: 6px;
+            .plant-images img {
+                height: 240px;
             }
-            #quiz-info {
+            .inputs-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5em;
+            }
+            .inputs-row input, 
+            .inputs-row button {
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .share-info {
+                font-size: 1em;
+                padding: 0.3em 0.5em;
+                margin-top: -2.75em;
+            }
+            .plant-card {
+                padding: 0.75em 0.75em;
+            }
+            .container {
+                overflow-x: auto;
+            }
+            .quiz-page {
+                gap: 1em;
+            }
+            .overview-table {
+                font-size: 0.85em;
+                margin-top: 16px;
+                width: max-content;
+                min-width: 100vw;
+                position: relative;
+                width: 100% !important;
+                min-width: 0 !important;
+            }
+            .nav-row {
+                display: flex;
+                flex-direction: row;
+                align-items: stretch;
+                margin-top: 30px;
+                margin-bottom: 0;
+            }
+            .nav-row .nav-btn {
+                width: 30vw;
+                min-width: 90px;
+                height: 3.5em;
                 position: static;
-                text-align: right;
-                float: right;
-                width: fit-content;
-                margin-bottom: 5px;
-                margin-left: 5px;
-                border-radius: 6px;
+                white-space: normal;
+                align-items: center;
+                margin-bottom: 16px;
+            }
+            .nav-row .page-info {
+                flex: 1 1 auto;
+                min-width: 0;
+                text-align: center;
+                width: auto;
+                max-width: 40vw;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                white-space: pre-line;
+                align-items: center;
+            }
+            .nav-row-bottom {
+                margin-bottom: -16px;
+            }
+            .overview-nav-row .page-info {
+                text-align: center;
+                justify-content: flex-end;
+                margin-top: 14px;
+                margin-right: 36px;
+            }
+            .stand-box {
+                margin-top: 16px;
+            }
+            .mobile-hyphen { 
+                display: inline; 
+            }
+            .mobile-break::after {
+                content: "\A";
+                white-space: pre;
+            }
+            .mobile-break { 
+                display: inline; 
+            }
+            .overview-container {
+                position: relative;
+                overflow: auto;
+                background: #fff;
+                box-sizing: content-box;
+            }
+            .overview-container::before {
+                content: "";
+                position: fixed;
+                top: var(--overview-table-top, 0);
+                left: 32px;
+                width: 18px;
+                height: var(--overview-table-height, 100px);
+                pointer-events: none;
+                border-left: 3px dashed #b2dfdb;
+                z-index: 2;
+                display: block;
+                transition: opacity 0.2s;
+                opacity: 1;
+            }
+            .overview-container.scrolled-start::before {
+                opacity: 0;
+            }
+            .overview-container::after {
+                content: "";
+                position: fixed;
+                top: var(--overview-table-top, 0);
+                right: 32px;
+                width: 18px;
+                height: var(--overview-table-height, 100px);
+                pointer-events: none;
+                border-right: 3px dashed #b2dfdb;
+                z-index: 2;
+                display: block;
+                transition: opacity 0.2s;
+                opacity: 1;
+            }
+            .overview-container.scrolled-end::after {
+                opacity: 0;
+            }
+            body.banner-hidden .container {
+                margin-top: 0 !important;
+            }
+            #versionInfoFixed {
+                position: static !important;
+                margin-top: 13px;
+                margin-right: 32px;
+            }
+            .top-bar-mobile {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+            }
+            #bannerToggle,
+            #showBannerBtn {
+                position: static !important;
+                float: none;
+                margin-top: 13px;
+                margin-bottom: 13px;
+                margin-right: 32px;
+            }
+            .banner {
+                padding-top: env(safe-area-inset-top, 0);
+                margin-top: -200px;
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+                border-top: none;
+            }
+            h1 {
+                margin-top: 140px;
+            }
+            body {
+                margin-top: 0 !important;
+            }
+            .versioninfo-spacer {
+                display: none;
             }
         }
-        #sort-label {
-            background: #fff;
-            border: 1px solid #bbb;
-            border-radius: 4px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-            padding: 2.5px 7.5px;
-            font-size: 0.8em;
-            margin-right: 5px;
-            display: inline-block;
+        @media (min-width: 701px) {
+            body.banner-hidden .versioninfo-spacer {
+                height: 46px;
+                display: block;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="quiz-info"></div>
-
-    <!-- Button zum Ein- und Ausklappen des Intro-Textes -->
-    <button id="toggle-intro-btn"></button>
-
-    <div id="intro-text" style="transition: max-height 0.5s, opacity 0.5s; overflow: hidden;">
-        <h1>Pflanzen des Universitätscampus Konstanz</h1>
-        <h2>Arten aus dem Geländepraktikum 2025</h2>
-        <p>Nenne den wissenschaftlichen <b><span style="font-variant: small-caps;">oder</span></b> den deutschen Namen der folgenden Pflanzenarten sowie die dazugehörige Pflanzenfamilie.<br>
-        Das Quiz ist in Runden mit jeweils 20 Pflanzenarten aufgeteilt. Am Ende jeder Runde kannst du die Anzahl der korrekt bestimmten Pflanzen sehen.<br><br>
-        <i>Taxonomie nach <a href="https://biologie.uni-konstanz.de/doerken/">Prof. Dr. Veit Martin Dörken</a> (Universität Konstanz) und dem <a href="https://www.floraweb.de/">Bundesamt für Naturschutz (BfN)</a>, Bilder von verschiedenen Urhebern auf <a href="https://www.pflanzenlernen.de/">Planta Go Lingo</a> sowie <a href="https://www.blumeninschwaben.de/">Flora-de</a>.<br>
-        Abweichende taxonomische Konzepte und Trivialnamen werden nicht berücksichtigt, diese können auf den genannten Websites eingesehen werden.<br>
-        Weitere Bilder und die wichtigsten Bestimmungsmerkmale findest du auf <a href="https://www.blumeninschwaben.de/">Flora-de</a>.</i></p>
+    <div class="top-bar-mobile">
+        <div class="version-info" id="versionInfoFixed"></div>
+        <button class="banner-toggle" id="bannerToggle" style="display:block;">Intro ausblenden</button>
+        <button class="banner-toggle" id="showBannerBtn" style="display:none;">Intro einblenden</button>
     </div>
-
-    <div id="pagination-top" style="margin-bottom: 20px;"></div>
-
-    <!-- Buttons zum Mischen der Pflanzen -->
-    <div style="display: flex; gap: 5px; align-items: center">
-        <span class="sort-label" id="sort-label" style="margin-right: 5px;">Sortieren nach...</span>
-        <button onclick="sortPlants('scientific')">wiss. Namen</button>
-        <button onclick="sortPlants('german')">dt. Namen</button>
-        <button onclick="sortPlants('family')">Familie</button>
-        <button id="shuffle-btn" onclick="shufflePlants()">zufällig</button>
+    <div class="versioninfo-spacer"></div>
+    <div class="banner" id="banner">
+        <div class="banner-text">
+            <h1>Pflanzen des Universitätscampus Konstanz</h1>
+            <h2>Arten aus dem Geländepraktikum 2025</h2>
+                Nenne den <b>wissenschaftlichen <u><span style="font-variant: small-caps;">oder</span></u> den deutschen Namen</b> der folgenden Pflanzenarten sowie die dazugehörige Pflanzenfamilie.<br>
+                Das Quiz ist in Runden mit jeweils 20 Pflanzenarten aufgeteilt. Am Ende jeder Runde kannst du die Anzahl der korrekt bestimmten Pflanzen sehen.<br><br>
+                <i>
+                    Taxonomie nach <a href="https://biologie.uni-konstanz.de/doerken/">Prof. Dr. Veit Martin Dörken</a> (Universität Konstanz) und dem <a href="https://www.floraweb.de/">Bundesamt für Naturschutz (BfN)</a>, 
+                    Bilder von verschiedenen Urhebern auf <a href="https://www.pflanzenlernen.de/">Planta Go Lingo</a> sowie <a href="https://www.blumeninschwaben.de/">Flora-de</a>.<br>
+                    Abweichende taxonomische Konzepte und Trivialnamen werden nicht berücksichtigt, diese können auf den genannten Websites eingesehen werden.<br>
+                    Weitere Bilder und die wichtigsten Bestimmungsmerkmale findest du auf <a href="https://www.blumeninschwaben.de/">Flora-de</a>.
+                </i>
+        </div>
     </div>
-    <br><br>
-
-    <div id="quiz-container"></div>
-    <br><br>
-
-    <!-- Button zum Überprüfen aller Eingaben -->
-    <button id="check-btn" onclick="checkAnswers()">[Enter] Alle Eingaben überprüfen</button>
-
-    <div id="pagination" style="margin-top: 20px;"></div>
-    <div class="result" id="result"></div>
+    <div class="container" id="mainContainer">
+        <div id="quizRoot"></div>
+    </div>
     <script>
-        const plants = [
-            {
-                "scientific": "Abies alba",
-                "german": "Weiß-Tanne",
-                "family": "Pinaceae",
-                "family_german": [
-                    "Kieferngewächse"
-                ],
-                "images": [
-                    "abies_alba1.jpg",
-                    "abies_alba2.jpg"
-                ]
-            },
-            {
-                "scientific": "Acer campestre",
-                "german": "Feld-Ahorn",
-                "family": "Sapindaceae",
-                "family_german": [
-                    "Seifenbaumgewächse"
-                ],
-                "images": [
-                    "acer_campestre1.jpg",
-                    "acer_campestre2.jpg"
-                ]
-            },
-            {
-                "scientific": "Acer platanoides",
-                "german": "Spitz-Ahorn",
-                "family": "Sapindaceae",
-                "family_german": [
-                    "Seifenbaumgewächse"
-                ],
-                "images": [
-                    "acer_platanoides1.jpg",
-                    "acer_platanoides2.jpg"
-                ]
-            },
-            {
-                "scientific": "Acer pseudoplatanus",
-                "german": "Berg-Ahorn",
-                "family": "Sapindaceae",
-                "family_german": [
-                    "Seifenbaumgewächse"
-                ],
-                "images": [
-                    "acer_pseudoplatanus1.jpg",
-                    "acer_pseudoplatanus2.jpg"
-                ]
-            },
-            {
-                "scientific": "Achillea millefolium agg.",
-                "german": "Artengruppe Gewöhnliche Schafgarbe",
-                "family": "Asteraceae",
-                "family_german": [
-                    "Korbblütler"
-                ],
-                "images": [
-                    "achillea_millefolium1.jpg",
-                    "achillea_millefolium2.jpg"
-                ]
-            },
-            {
-                "scientific": "Aegopodium podagraria",
-                "german": "Gewöhnlicher Giersch",
-                "family": "Apiaceae",
-                "family_german": [
-                    "Doldenblütler"
-                ],
-                "images": [
-                    "aegopodium_podagraria1.jpg",
-                    "aegopodium_podagraria2.jpg"
-                ]
-            },
-            {
-                "scientific": "Aesculus hippocastanum",
-                "german": "Gewöhnliche Rosskastanie",
-                "family": "Sapindaceae",
-                "family_german": [
-                    "Seifenbaumgewächse"
-                ],
-                "images": [
-                    "aesculus_hippocastanum1.jpg",
-                    "aesculus_hippocastanum2.jpg"
-                ]
-            },
-            {
-                "scientific": "Agrimonia eupatoria",
-                "german": "Kleiner Odermennig",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "agrimonia_eupatoria1.jpg",
-                    "agrimonia_eupatoria2.jpg"
-                ]
-            },
-            {
-                "scientific": "Ajuga reptans",
-                "german": "Kriechender Günsel",
-                "family": "Lamiaceae",
-                "family_german": [
-                    "Lippenblütler"
-                ],
-                "images": [
-                    "ajuga_reptans1.jpg",
-                    "ajuga_reptans2.jpg"
-                ]
-            },
-            {
-                "scientific": "Alliaria petiolata",
-                "german": "Knoblauchsrauke",
-                "family": "Brassicaceae",
-                "family_german": [
-                    "Kreuzblütler"
-                ],
-                "images": [
-                    "alliaria_petiolata1.jpg",
-                    "alliaria_petiolata2.jpg"
-                ]
-            },
-            {
-                "scientific": "Alopecurus pratensis agg.",
-                "german": "Artengruppe Wiesen-Fuchsschwanz",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "alopecurus_pratensis1.jpg",
-                    "alopecurus_pratensis2.jpg"
-                ]
-            },
-            {
-                "scientific": "Anemone nemorosa",
-                "german": "Busch-Windröschen",
-                "family": "Ranunculaceae",
-                "family_german": [
-                    "Hahnenfußgewächse"
-                ],
-                "images": [
-                    "anemone_nemorosa1.jpg",
-                    "anemone_nemorosa2.jpg"
-                ]
-            },
-            {
-                "scientific": "Anthoxanthum odoratum agg.",
-                "german": "Artengruppe Gewöhnliches Ruchgras",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "anthoxanthum_odoratum1.jpg",
-                    "anthoxanthum_odoratum2.jpg"
-                ]
-            },
-            {
-                "scientific": "Arrhenatherum elatius",
-                "german": "Glatthafer",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "arrhenatherum_elatius1.jpg",
-                    "arrhenatherum_elatius2.jpg"
-                ]
-            },
-            {
-                "scientific": "Arum maculatum agg.",
-                "german": "Artengruppe Gefleckter Aronstab",
-                "family": "Araceae",
-                "family_german": [
-                    "Aronstabgewächse"
-                ],
-                "images": [
-                    "arum_maculatum1.jpg",
-                    "arum_maculatum2.jpg"
-                ]
-            },
-            {
-                "scientific": "Bellis perennis",
-                "german": "Ausdauerndes Gänseblümchen",
-                "family": "Asteraceae",
-                "family_german": [
-                    "Korbblütler"
-                ],
-                "images": [
-                    "bellis_perennis1.jpg",
-                    "bellis_perennis2.jpg"
-                ]
-            },
-            {
-                "scientific": "Berberis julianae",
-                "german": "Juliane-Berberitze",
-                "family": "Berberidaceae",
-                "family_german": [
-                    "Berberitzengewächse"
-                ],
-                "images": [
-                    "berberis_julianae1.jpg",
-                    "berberis_julianae2.jpg"
-                ]
-            },
-            {
-                "scientific": "Betula pendula",
-                "german": "Hänge-Birke",
-                "family": "Betulaceae",
-                "family_german": [
-                    "Birkengewächse"
-                ],
-                "images": [
-                    "betula_pendula1.jpg",
-                    "betula_pendula2.jpg"
-                ]
-            },
-            {
-                "scientific": "Brachypodium sylvaticum",
-                "german": "Wald-Zwenke",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "brachypodium_sylvaticum1.jpg",
-                    "brachypodium_sylvaticum2.jpg"
-                ]
-            },
-            {
-                "scientific": "Briza media",
-                "german": "Gewöhnliches Zittergras",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "briza_media1.jpg",
-                    "briza_media2.jpg"
-                ]
-            },
-            {
-                "scientific": "Bromus erectus agg.",
-                "german": "Artengruppe Aufrechte Trespe",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "bromus_erectus1.jpg",
-                    "bromus_erectus2.jpg"
-                ]
-            },
-            {
-                "scientific": "Calystegia sepium agg.",
-                "german": "Artengruppe Gewöhnliche Zaunwinde",
-                "family": "Convolvulaceae",
-                "family_german": [
-                    "Windengewächse"
-                ],
-                "images": [
-                    "calystegia_sepium1.jpg",
-                    "calystegia_sepium2.jpg"
-                ]
-            },
-            {
-                "scientific": "Cardamine flexuosa",
-                "german": "Wald-Schaumkraut",
-                "family": "Brassicaceae",
-                "family_german": [
-                    "Kreuzblütler"
-                ],
-                "images": [
-                    "cardamine_flexuosa1.jpg",
-                    "cardamine_flexuosa2.jpg"
-                ]
-            },
-            {
-                "scientific": "Carex acutiformis",
-                "german": "Sumpf-Segge",
-                "family": "Cyperaceae",
-                "family_german": [
-                    "Sauergräser"
-                ],
-                "images": [
-                    "carex_acutiformis1.jpg",
-                    "carex_acutiformis2.jpg"
-                ]
-            },
-            {
-                "scientific": "Carex digitata",
-                "german": "Finger-Segge",
-                "family": "Cyperaceae",
-                "family_german": [
-                    "Sauergräser"
-                ],
-                "images": [
-                    "carex_digitata1.jpg",
-                    "carex_digitata2.jpg"
-                ]
-            },
-            {
-                "scientific": "Carex distans",
-                "german": "Entferntährige Segge",
-                "family": "Cyperaceae",
-                "family_german": [
-                    "Sauergräser"
-                ],
-                "images": [
-                    "carex_distans1.jpg",
-                    "carex_distans2.jpg"
-                ]
-            },
-            {
-                "scientific": "Carex flacca",
-                "german": "Blaugrüne Segge",
-                "family": "Cyperaceae",
-                "family_german": [
-                    "Sauergräser"
-                ],
-                "images": [
-                    "carex_flacca1.jpg",
-                    "carex_flacca2.jpg"
-                ]
-            },
-            {
-                "scientific": "Carex hirta",
-                "german": "Behaarte Segge",
-                "family": "Cyperaceae",
-                "family_german": [
-                    "Sauergräser"
-                ],
-                "images": [
-                    "carex_hirta1.jpg",
-                    "carex_hirta2.jpg"
-                ]
-            },
-            {
-                "scientific": "Carex muricata agg.",
-                "german": "Artengruppe Sparrige Segge",
-                "family": "Cyperaceae",
-                "family_german": [
-                    "Sauergräser"
-                ],
-                "images": [
-                    "carex_muricata1.jpg",
-                    "carex_muricata2.jpg"
-                ]
-            },
-            {
-                "scientific": "Carex pendula",
-                "german": "Hänge-Segge",
-                "family": "Cyperaceae",
-                "family_german": [
-                    "Sauergräser"
-                ],
-                "images": [
-                    "carex_pendula1.jpg",
-                    "carex_pendula2.jpg"
-                ]
-            },
-            {
-                "scientific": "Carex sylvatica",
-                "german": "Wald-Segge",
-                "family": "Cyperaceae",
-                "family_german": [
-                    "Sauergräser"
-                ],
-                "images": [
-                    "carex_sylvatica1.jpg",
-                    "carex_sylvatica2.jpg"
-                ]
-            },
-            {
-                "scientific": "Carpinus betulus",
-                "german": "Hainbuche",
-                "family": "Betulaceae",
-                "family_german": [
-                    "Birkengewächse"
-                ],
-                "images": [
-                    "carpinus_betulus1.jpg",
-                    "carpinus_betulus2.jpg"
-                ]
-            },
-            {
-                "scientific": "Centaurea jacea agg.",
-                "german": "Artengruppe Wiesen-Flockenblume",
-                "family": "Asteraceae",
-                "family_german": [
-                    "Korbblütler"
-                ],
-                "images": [
-                    "centaurea_jacea1.jpg",
-                    "centaurea_jacea2.jpg"
-                ]
-            },
-            {
-                "scientific": "Cerastium fontanum agg.",
-                "german": "Artengruppe Quellen-Hornkraut",
-                "family": "Caryophyllaceae",
-                "family_german": [
-                    "Nelkengewächse"
-                ],
-                "images": [
-                    "cerastium_fontanum1.jpg",
-                    "cerastium_fontanum2.jpg"
-                ]
-            },
-            {
-                "scientific": "Circaea intermedia",
-                "german": "Mittleres Hexenkraut",
-                "family": "Onagraceae",
-                "family_german": [
-                    "Nachtkerzengewächse"
-                ],
-                "images": [
-                    "circaea_intermedia1.jpg",
-                    "circaea_intermedia2.jpg"
-                ]
-            },
-            {
-                "scientific": "Circaea lutetiana",
-                "german": "Großes Hexenkraut",
-                "family": "Onagraceae",
-                "family_german": [
-                    "Nachtkerzengewächse"
-                ],
-                "images": [
-                    "circaea_lutetiana1.jpg",
-                    "circaea_lutetiana2.jpg"
-                ]
-            },
-            {
-                "scientific": "Cirsium arvense",
-                "german": "Acker-Kratzdistel",
-                "family": "Asteraceae",
-                "family_german": [
-                    "Korbblütler"
-                ],
-                "images": [
-                    "cirsium_arvense1.jpg",
-                    "cirsium_arvense2.jpg"
-                ]
-            },
-            {
-                "scientific": "Colchicum autumnale",
-                "german": "Herbst-Zeitlose",
-                "family": "Colchicaceae",
-                "family_german": [
-                    "Zeitlosengewächse"
-                ],
-                "images": [
-                    "colchicum_autumnale1.jpg",
-                    "colchicum_autumnale2.jpg"
-                ]
-            },
-            {
-                "scientific": "Cornus alba agg.",
-                "german": "Artengruppe Tatarischer Hartriegel",
-                "family": "Cornaceae",
-                "family_german": [
-                    "Hartriegelgewächse"
-                ],
-                "images": [
-                    "cornus_alba1.jpg",
-                    "cornus_alba2.jpg"
-                ]
-            },
-            {
-                "scientific": "Cornus sanguinea",
-                "german": "Blutroter Hartriegel",
-                "family": "Cornaceae",
-                "family_german": [
-                    "Hartriegelgewächse"
-                ],
-                "images": [
-                    "cornus_sanguinea1.jpg",
-                    "cornus_sanguinea2.jpg"
-                ]
-            },
-            {
-                "scientific": "Corylus avellana",
-                "german": "Gewöhnliche Hasel",
-                "family": "Betulaceae",
-                "family_german": [
-                    "Birkengewächse"
-                ],
-                "images": [
-                    "corylus_avellana1.jpg",
-                    "corylus_avellana2.jpg"
-                ]
-            },
-            {
-                "scientific": "Crataegus laevigata",
-                "german": "Zweigriffliger Weißdorn",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "crataegus_laevigata1.jpg",
-                    "crataegus_laevigata2.jpg"
-                ]
-            },
-            {
-                "scientific": "Crataegus monogyna",
-                "german": "Eingriffliger Weißdorn",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "crataegus_monogyna1.jpg",
-                    "crataegus_monogyna2.jpg"
-                ]
-            },
-            {
-                "scientific": "Crataegus rhipidophylla agg.",
-                "german": "Artengruppe Großkelchiger Weißdorn",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "crataegus_rhipidophylla1.jpg",
-                    "crataegus_rhipidophylla2.jpg"
-                ]
-            },
-            {
-                "scientific": "Crepis biennis",
-                "german": "Wiesen-Pippau",
-                "family": "Asteraceae",
-                "family_german": [
-                    "Korbblütler"
-                ],
-                "images": [
-                    "crepis_biennis1.jpg",
-                    "crepis_biennis2.jpg"
-                ]
-            },
-            {
-                "scientific": "Cynosurus cristatus",
-                "german": "Weide-Kammgras",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "cynosurus_cristatus1.jpg",
-                    "cynosurus_cristatus2.jpg"
-                ]
-            },
-            {
-                "scientific": "Dactylis glomerata agg.",
-                "german": "Artengruppe Gewöhnliches Knäuelgras",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "dactylis_glomerata1.jpg",
-                    "dactylis_glomerata2.jpg"
-                ]
-            },
-            {
-                "scientific": "Daucus carota",
-                "german": "Wilde Möhre",
-                "family": "Apiaceae",
-                "family_german": [
-                    "Doldenblütler"
-                ],
-                "images": [
-                    "daucus_carota1.jpg",
-                    "daucus_carota2.jpg"
-                ]
-            },
-            {
-                "scientific": "Elymus repens",
-                "german": "Gewöhnliche Quecke",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "elymus_repens1.jpg",
-                    "elymus_repens2.jpg"
-                ]
-            },
-            {
-                "scientific": "Epilobium hirsutum",
-                "german": "Zottiges Weidenröschen",
-                "family": "Onagraceae",
-                "family_german": [
-                    "Nachtkerzengewächse"
-                ],
-                "images": [
-                    "epilobium_hirsutum1.jpg",
-                    "epilobium_hirsutum2.jpg"
-                ]
-            },
-            {
-                "scientific": "Equisetum arvense",
-                "german": "Acker-Schachtelhalm",
-                "family": "Equisetaceae",
-                "family_german": [
-                    "Schachtelhalmgewächse"
-                ],
-                "images": [
-                    "equisetum_arvense1.jpg",
-                    "equisetum_arvense2.jpg"
-                ]
-            },
-            {
-                "scientific": "Erigeron annuus",
-                "german": "Feinstrahl-Berufkraut",
-                "family": "Asteraceae",
-                "family_german": [
-                    "Korbblütler"
-                ],
-                "images": [
-                    "erigeron_annuus1.jpg",
-                    "erigeron_annuus2.jpg"
-                ]
-            },
-            {
-                "scientific": "Euonymus europaeus",
-                "german": "Europäisches Pfaffenhütchen",
-                "family": "Celastraceae",
-                "family_german": [
-                    "Spindelbaumgewächse"
-                ],
-                "images": [
-                    "euonymus_europaeus1.jpg",
-                    "euonymus_europaeus2.jpg"
-                ]
-            },
-            {
-                "scientific": "Euphorbia cyparissias",
-                "german": "Zypressen-Wolfsmilch",
-                "family": "Euphorbiaceae",
-                "family_german": [
-                    "Wolfsmilchgewächse"
-                ],
-                "images": [
-                    "euphorbia_cyparissias1.jpg",
-                    "euphorbia_cyparissias2.jpg"
-                ]
-            },
-            {
-                "scientific": "Fagus sylvatica",
-                "german": "Rot-Buche",
-                "family": "Fagaceae",
-                "family_german": [
-                    "Buchengewächse"
-                ],
-                "images": [
-                    "fagus_sylvatica1.jpg",
-                    "fagus_sylvatica2.jpg"
-                ]
-            },
-            {
-                "scientific": "Festuca arundinacea",
-                "german": "Rohr-Schwingel",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "festuca_arundinacea1.jpg",
-                    "festuca_arundinacea2.jpg"
-                ]
-            },
-            {
-                "scientific": "Festuca pratensis",
-                "german": "Wiesen-Schwingel",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "festuca_pratensis1.jpg",
-                    "festuca_pratensis2.jpg"
-                ]
-            },
-            {
-                "scientific": "Ficaria verna",
-                "german": "Scharbockskraut",
-                "family": "Ranunculaceae",
-                "family_german": [
-                    "Hahnenfußgewächse"
-                ],
-                "images": [
-                    "ficaria_verna1.jpg",
-                    "ficaria_verna2.jpg"
-                ]
-            },
-            {
-                "scientific": "Filipendula ulmaria",
-                "german": "Echtes Mädesüß",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "filipendula_ulmaria1.jpg",
-                    "filipendula_ulmaria2.jpg"
-                ]
-            },
-            {
-                "scientific": "Fragaria vesca",
-                "german": "Wald-Erdbeere",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "fragaria_vesca1.jpg",
-                    "fragaria_vesca2.jpg"
-                ]
-            },
-            {
-                "scientific": "Fraxinus excelsior",
-                "german": "Gewöhnliche Esche",
-                "family": "Oleaceae",
-                "family_german": [
-                    "Ölbaumgewächse"
-                ],
-                "images": [
-                    "fraxinus_excelsior1.jpg",
-                    "fraxinus_excelsior2.jpg"
-                ]
-            },
-            {
-                "scientific": "Galeobdolon luteum agg.",
-                "german": "Artengruppe Echte Goldnessel",
-                "family": "Lamiaceae",
-                "family_german": [
-                    "Lippenblütler"
-                ],
-                "images": [
-                    "galeobdolon_luteum1.jpg",
-                    "galeobdolon_luteum2.jpg"
-                ]
-            },
-            {
-                "scientific": "Galeopsis tetrahit agg.",
-                "german": "Artengruppe Stechender Hohlzahn",
-                "family": "Lamiaceae",
-                "family_german": [
-                    "Lippenblütler"
-                ],
-                "images": [
-                    "galeopsis_tetrahit1.jpg",
-                    "galeopsis_tetrahit2.jpg"
-                ]
-            },
-            {
-                "scientific": "Galium aparine agg.",
-                "german": "Artengruppe Kletten-Labkraut",
-                "family": "Rubiaceae",
-                "family_german": [
-                    "Rötegewächse"
-                ],
-                "images": [
-                    "galium_aparine1.jpg",
-                    "galium_aparine2.jpg"
-                ]
-            },
-            {
-                "scientific": "Galium mollugo agg.",
-                "german": "Artengruppe Wiesen-Labkraut",
-                "family": "Rubiaceae",
-                "family_german": [
-                    "Rötegewächse"
-                ],
-                "images": [
-                    "galium_mollugo1.jpg",
-                    "galium_mollugo2.jpg"
-                ]
-            },
-            {
-                "scientific": "Galium odoratum",
-                "german": "Waldmeister",
-                "family": "Rubiaceae",
-                "family_german": [
-                    "Rötegewächse"
-                ],
-                "images": [
-                    "galium_odoratum1.jpg",
-                    "galium_odoratum2.jpg"
-                ]
-            },
-            {
-                "scientific": "Galium verum agg.",
-                "german": "Artengruppe Echtes Labkraut",
-                "family": "Rubiaceae",
-                "family_german": [
-                    "Rötegewächse"
-                ],
-                "images": [
-                    "galium_verum1.jpg",
-                    "galium_verum2.jpg"
-                ]
-            },
-            {
-                "scientific": "Geranium pratense",
-                "german": "Wiesen-Storchschnabel",
-                "family": "Geraniaceae",
-                "family_german": [
-                    "Storchschnabelgewächse"
-                ],
-                "images": [
-                    "geranium_pratense1.jpg",
-                    "geranium_pratense2.jpg"
-                ]
-            },
-            {
-                "scientific": "Geranium robertianum agg.",
-                "german": "Artengruppe Stinkender Storchschnabel",
-                "family": "Geraniaceae",
-                "family_german": [
-                    "Storchschnabelgewächse"
-                ],
-                "images": [
-                    "geranium_robertianum1.jpg",
-                    "geranium_robertianum2.jpg"
-                ]
-            },
-            {
-                "scientific": "Geum rivale",
-                "german": "Bach-Nelkenwurz",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "geum_rivale1.jpg",
-                    "geum_rivale2.jpg"
-                ]
-            },
-            {
-                "scientific": "Geum urbanum",
-                "german": "Echte Nelkenwurz",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "geum_urbanum1.jpg",
-                    "geum_urbanum2.jpg"
-                ]
-            },
-            {
-                "scientific": "Glechoma hederacea agg.",
-                "german": "Artengruppe Gewöhnlicher Gundermann",
-                "family": "Lamiaceae",
-                "family_german": [
-                    "Lippenblütler"
-                ],
-                "images": [
-                    "glechoma_hederacea1.jpg",
-                    "glechoma_hederacea2.jpg"
-                ]
-            },
-            {
-                "scientific": "Hedera helix",
-                "german": "Gewöhnlicher Efeu",
-                "family": "Araliaceae",
-                "family_german": [
-                    "Araliengewächse"
-                ],
-                "images": [
-                    "hedera_helix1.jpg",
-                    "hedera_helix2.jpg"
-                ]
-            },
-            {
-                "scientific": "Heracleum sphondylium",
-                "german": "Gewöhnliche Bärenklau",
-                "family": "Apiaceae",
-                "family_german": [
-                    "Doldenblütler"
-                ],
-                "images": [
-                    "heracleum_sphondylium1.jpg",
-                    "heracleum_sphondylium2.jpg"
-                ]
-            },
-            {
-                "scientific": "Hieracium subg. Pilosella",
-                "german": "Untergattung Mausohr-Habichtskräuter",
-                "family": "Asteraceae",
-                "family_german": [
-                    "Korbblütler"
-                ],
-                "images": [
-                    "hieracium_subg_pilosella1.jpg",
-                    "hieracium_subg_pilosella2.jpg"
-                ]
-            },
-            {
-                "scientific": "Holcus lanatus",
-                "german": "Wolliges Honiggras",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "holcus_lanatus1.jpg",
-                    "holcus_lanatus2.jpg"
-                ]
-            },
-            {
-                "scientific": "Impatiens glandulifera",
-                "german": "Drüsiges Springkraut",
-                "family": "Balsaminaceae",
-                "family_german": [
-                    "Balsaminengewächse"
-                ],
-                "images": [
-                    "impatiens_glandulifera1.jpg",
-                    "impatiens_glandulifera2.jpg"
-                ]
-            },
-            {
-                "scientific": "Juglans regia",
-                "german": "Echte Walnuss",
-                "family": "Juglandaceae",
-                "family_german": [
-                    "Walnussgewächse"
-                ],
-                "images": [
-                    "juglans_regia1.jpg",
-                    "juglans_regia2.jpg"
-                ]
-            },
-            {
-                "scientific": "Knautia arvensis agg.",
-                "german": "Artengruppe Wiesen-Witwenblume",
-                "family": "Caprifoliaceae",
-                "family_german": [
-                    "Geißblattgewächse"
-                ],
-                "images": [
-                    "knautia_arvensis1.jpg",
-                    "knautia_arvensis2.jpg"
-                ]
-            },
-            {
-                "scientific": "Lapsana communis",
-                "german": "Gewöhnlicher Rainkohl",
-                "family": "Asteraceae",
-                "family_german": [
-                    "Korbblütler"
-                ],
-                "images": [
-                    "lapsana_communis1.jpg",
-                    "lapsana_communis2.jpg"
-                ]
-            },
-            {
-                "scientific": "Larix decidua",
-                "german": "Europäische Lärche",
-                "family": "Pinaceae",
-                "family_german": [
-                    "Kieferngewächse"
-                ],
-                "images": [
-                    "larix_decidua1.jpg",
-                    "larix_decidua2.jpg"
-                ]
-            },
-            {
-                "scientific": "Lathyrus pratensis",
-                "german": "Wiesen-Platterbse",
-                "family": "Fabaceae",
-                "family_german": [
-                    "Schmetterlingsblütler"
-                ],
-                "images": [
-                    "lathyrus_pratensis1.jpg",
-                    "lathyrus_pratensis2.jpg"
-                ]
-            },
-            {
-                "scientific": "Lathyrus vernus",
-                "german": "Frühlings-Platterbse",
-                "family": "Fabaceae",
-                "family_german": [
-                    "Schmetterlingsblütler"
-                ],
-                "images": [
-                    "lathyrus_vernus1.jpg",
-                    "lathyrus_vernus2.jpg"
-                ]
-            },
-            {
-                "scientific": "Leontodon hispidus",
-                "german": "Steifhaariger Löwenzahn",
-                "family": "Asteraceae",
-                "family_german": [
-                    "Korbblütler"
-                ],
-                "images": [
-                    "leontodon_hispidus1.jpg",
-                    "leontodon_hispidus2.jpg"
-                ]
-            },
-            {
-                "scientific": "Leucanthemum vulgare agg.",
-                "german": "Artengruppe Wiesen-Margerite",
-                "family": "Asteraceae",
-                "family_german": [
-                    "Korbblütler"
-                ],
-                "images": [
-                    "leucanthemum_vulgare1.jpg",
-                    "leucanthemum_vulgare2.jpg"
-                ]
-            },
-            {
-                "scientific": "Ligustrum vulgare",
-                "german": "Gewöhnliche Rainweide",
-                "family": "Oleaceae",
-                "family_german": [
-                    "Ölbaumgewächse"
-                ],
-                "images": [
-                    "ligustrum_vulgare1.jpg",
-                    "ligustrum_vulgare2.jpg"
-                ]
-            },
-            {
-                "scientific": "Lonicera pileata",
-                "german": "Immergrüne Kriech-Heckenkirsche",
-                "family": "Caprifoliaceae",
-                "family_german": [
-                    "Geißblattgewächse"
-                ],
-                "images": [
-                    "lonicera_pileata1.jpg",
-                    "lonicera_pileata2.jpg"
-                ]
-            },
-            {
-                "scientific": "Lonicera xylosteum",
-                "german": "Rote Heckenkirsche",
-                "family": "Caprifoliaceae",
-                "family_german": [
-                    "Geißblattgewächse"
-                ],
-                "images": [
-                    "lonicera_xylosteum1.jpg",
-                    "lonicera_xylosteum2.jpg"
-                ]
-            },
-            {
-                "scientific": "Lotus corniculatus agg.",
-                "german": "Artengruppe Gewöhnlicher Hornklee",
-                "family": "Fabaceae",
-                "family_german": [
-                    "Schmetterlingsblütler"
-                ],
-                "images": [
-                    "lotus_corniculatus1.jpg",
-                    "lotus_corniculatus2.jpg"
-                ]
-            },
-            {
-                "scientific": "Luzula campestris agg.",
-                "german": "Artengruppe Gewöhnliche Hainsimse",
-                "family": "Juncaceae",
-                "family_german": [
-                    "Binsengewächse"
-                ],
-                "images": [
-                    "luzula_campestris1.jpg",
-                    "luzula_campestris2.jpg"
-                ]
-            },
-            {
-                "scientific": "Lysimachia nummularia",
-                "german": "Pfennig-Gilbweiderich",
-                "family": "Primulaceae",
-                "family_german": [
-                    "Primelgewächse"
-                ],
-                "images": [
-                    "lysimachia_nummularia1.jpg",
-                    "lysimachia_nummularia2.jpg"
-                ]
-            },
-            {
-                "scientific": "Lysimachia punctata",
-                "german": "Drüsiger Gilbweiderich",
-                "family": "Primulaceae",
-                "family_german": [
-                    "Primelgewächse"
-                ],
-                "images": [
-                    "lysimachia_punctata1.jpg",
-                    "lysimachia_punctata2.jpg"
-                ]
-            },
-            {
-                "scientific": "Lysimachia vulgaris",
-                "german": "Gewöhnlicher Gilbweiderich",
-                "family": "Primulaceae",
-                "family_german": [
-                    "Primelgewächse"
-                ],
-                "images": [
-                    "lysimachia_vulgaris1.jpg",
-                    "lysimachia_vulgaris2.jpg"
-                ]
-            },
-            {
-                "scientific": "Mahonia aquifolium",
-                "german": "Gewöhnliche Mahonie",
-                "family": "Berberidaceae",
-                "family_german": [
-                    "Berberitzengewächse"
-                ],
-                "images": [
-                    "mahonia_aquifolium1.jpg",
-                    "mahonia_aquifolium2.jpg"
-                ]
-            },
-            {
-                "scientific": "Malus sylvestris agg.",
-                "german": "Artengruppe Holz-Apfel",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "malus_sylvestris1.jpg",
-                    "malus_sylvestris2.jpg"
-                ]
-            },
-            {
-                "scientific": "Medicago lupulina",
-                "german": "Hopfenklee",
-                "family": "Fabaceae",
-                "family_german": [
-                    "Schmetterlingsblütler"
-                ],
-                "images": [
-                    "medicago_lupulina1.jpg",
-                    "medicago_lupulina2.jpg"
-                ]
-            },
-            {
-                "scientific": "Medicago sativa agg.",
-                "german": "Artengruppe Luzerne",
-                "family": "Fabaceae",
-                "family_german": [
-                    "Schmetterlingsblütler"
-                ],
-                "images": [
-                    "medicago_sativa1.jpg",
-                    "medicago_sativa2.jpg"
-                ]
-            },
-            {
-                "scientific": "Melica nutans",
-                "german": "Nickendes Perlgras",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "melica_nutans1.jpg",
-                    "melica_nutans2.jpg"
-                ]
-            },
-            {
-                "scientific": "Oenothera",
-                "german": "Gattung Nachtkerzen",
-                "family": "Onagraceae",
-                "family_german": [
-                    "Nachtkerzengewächse"
-                ],
-                "images": [
-                    "oenothera1.jpg",
-                    "oenothera2.jpg"
-                ]
-            },
-            {
-                "scientific": "Paris quadrifolia",
-                "german": "Vierblättrige Einbeere",
-                "family": "Melanthiaceae",
-                "family_german": [
-                    "Germergewächse"
-                ],
-                "images": [
-                    "paris_quadrifolia1.jpg",
-                    "paris_quadrifolia2.jpg"
-                ]
-            },
-            {
-                "scientific": "Persicaria amphibia",
-                "german": "Wasser-Knöterich",
-                "family": "Polygonaceae",
-                "family_german": [
-                    "Knöterichgewächse"
-                ],
-                "images": [
-                    "persicaria_amphibia1.jpg",
-                    "persicaria_amphibia2.jpg"
-                ]
-            },
-            {
-                "scientific": "Phragmites australis",
-                "german": "Gewöhnliches Schilf",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "phragmites_australis1.jpg",
-                    "phragmites_australis2.jpg"
-                ]
-            },
-            {
-                "scientific": "Phyteuma spicatum",
-                "german": "Ährige Teufelskralle",
-                "family": "Campanulaceae",
-                "family_german": [
-                    "Glockenblumengewächse"
-                ],
-                "images": [
-                    "phyteuma_spicatum1.jpg",
-                    "phyteuma_spicatum2.jpg"
-                ]
-            },
-            {
-                "scientific": "Picea abies",
-                "german": "Rot-Fichte",
-                "family": "Pinaceae",
-                "family_german": [
-                    "Kieferngewächse"
-                ],
-                "images": [
-                    "picea_abies1.jpg",
-                    "picea_abies2.jpg"
-                ]
-            },
-            {
-                "scientific": "Pinus sylvestris",
-                "german": "Wald-Kiefer",
-                "family": "Pinaceae",
-                "family_german": [
-                    "Kieferngewächse"
-                ],
-                "images": [
-                    "pinus_sylvestris1.jpg",
-                    "pinus_sylvestris2.jpg"
-                ]
-            },
-            {
-                "scientific": "Plantago lanceolata",
-                "german": "Spitz-Wegerich",
-                "family": "Plantaginaceae",
-                "family_german": [
-                    "Wegerichgewächse"
-                ],
-                "images": [
-                    "plantago_lanceolata1.jpg",
-                    "plantago_lanceolata2.jpg"
-                ]
-            },
-            {
-                "scientific": "Plantago major agg.",
-                "german": "Artengruppe Breit-Wegerich",
-                "family": "Plantaginaceae",
-                "family_german": [
-                    "Wegerichgewächse"
-                ],
-                "images": [
-                    "plantago_major1.jpg",
-                    "plantago_major2.jpg"
-                ]
-            },
-            {
-                "scientific": "Plantago media agg.",
-                "german": "Artengruppe Mittlerer Wegerich",
-                "family": "Plantaginaceae",
-                "family_german": [
-                    "Wegerichgewächse"
-                ],
-                "images": [
-                    "plantago_media1.jpg",
-                    "plantago_media2.jpg"
-                ]
-            },
-            {
-                "scientific": "Poa annua",
-                "german": "Einjähriges Rispengras",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "poa_annua1.jpg",
-                    "poa_annua2.jpg"
-                ]
-            },
-            {
-                "scientific": "Poa chaixii",
-                "german": "Berg-Rispengras",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "poa_chaixii1.jpg",
-                    "poa_chaixii2.jpg"
-                ]
-            },
-            {
-                "scientific": "Poa trivialis",
-                "german": "Gewöhnliches Rispengras",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "poa_trivialis1.jpg",
-                    "poa_trivialis2.jpg"
-                ]
-            },
-            {
-                "scientific": "Polygonatum multiflorum",
-                "german": "Vielblütige Weißwurz",
-                "family": "Asparagaceae",
-                "family_german": [
-                    "Spargelgewächse"
-                ],
-                "images": [
-                    "polygonatum_multiflorum1.jpg",
-                    "polygonatum_multiflorum2.jpg"
-                ]
-            },
-            {
-                "scientific": "Potentilla anserina",
-                "german": "Gänse-Fingerkraut",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "potentilla_anserina1.jpg",
-                    "potentilla_anserina2.jpg"
-                ]
-            },
-            {
-                "scientific": "Potentilla reptans",
-                "german": "Kriechendes Fingerkraut",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "potentilla_reptans1.jpg",
-                    "potentilla_reptans2.jpg"
-                ]
-            },
-            {
-                "scientific": "Potentilla sterilis",
-                "german": "Erdbeer-Fingerkraut",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "potentilla_sterilis1.jpg",
-                    "potentilla_sterilis2.jpg"
-                ]
-            },
-            {
-                "scientific": "Prunus avium",
-                "german": "Vogel-Kirsche",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "prunus_avium1.jpg",
-                    "prunus_avium2.jpg"
-                ]
-            },
-            {
-                "scientific": "Prunus domestica",
-                "german": "Zwetschge",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "prunus_domestica1.jpg",
-                    "prunus_domestica2.jpg"
-                ]
-            },
-            {
-                "scientific": "Prunus laurocerasus",
-                "german": "Pontische Lorbeer-Kirsche",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "prunus_laurocerasus1.jpg",
-                    "prunus_laurocerasus2.jpg"
-                ]
-            },
-            {
-                "scientific": "Prunus mahaleb",
-                "german": "Felsen-Kirsche",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "prunus_mahaleb1.jpg",
-                    "prunus_mahaleb2.jpg"
-                ]
-            },
-            {
-                "scientific": "Prunus padus",
-                "german": "Gewöhnliche Trauben-Kirsche",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "prunus_padus1.jpg",
-                    "prunus_padus2.jpg"
-                ]
-            },
-            {
-                "scientific": "Prunus spinosa",
-                "german": "Schlehe",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "prunus_spinosa1.jpg",
-                    "prunus_spinosa2.jpg"
-                ]
-            },
-            {
-                "scientific": "Quercus petraea agg.",
-                "german": "Artengruppe Trauben-Eiche",
-                "family": "Fagaceae",
-                "family_german": [
-                    "Buchengewächse"
-                ],
-                "images": [
-                    "quercus_petraea1.jpg",
-                    "quercus_petraea2.jpg"
-                ]
-            },
-            {
-                "scientific": "Quercus robur",
-                "german": "Stiel-Eiche",
-                "family": "Fagaceae",
-                "family_german": [
-                    "Buchengewächse"
-                ],
-                "images": [
-                    "quercus_robur1.jpg",
-                    "quercus_robur2.jpg"
-                ]
-            },
-            {
-                "scientific": "Ranunculus acris agg.",
-                "german": "Artengruppe Scharfer Hahnenfuß",
-                "family": "Ranunculaceae",
-                "family_german": [
-                    "Hahnenfußgewächse"
-                ],
-                "images": [
-                    "ranunculus_acris1.jpg",
-                    "ranunculus_acris2.jpg"
-                ]
-            },
-            {
-                "scientific": "Ranunculus bulbosus",
-                "german": "Knolliger Hahnenfuß",
-                "family": "Ranunculaceae",
-                "family_german": [
-                    "Hahnenfußgewächse"
-                ],
-                "images": [
-                    "ranunculus_bulbosus1.jpg",
-                    "ranunculus_bulbosus2.jpg"
-                ]
-            },
-            {
-                "scientific": "Ranunculus repens",
-                "german": "Kriechender Hahnenfuß",
-                "family": "Ranunculaceae",
-                "family_german": [
-                    "Hahnenfußgewächse"
-                ],
-                "images": [
-                    "ranunculus_repens1.jpg",
-                    "ranunculus_repens2.jpg"
-                ]
-            },
-            {
-                "scientific": "Rhinanthus alectorolophus",
-                "german": "Zottiger Klappertopf",
-                "family": "Orobranchaceae",
-                "family_german": [
-                    "Sommerwurzgewächse"
-                ],
-                "images": [
-                    "rhinanthus_alectorolophus1.jpg",
-                    "rhinanthus_alectorolophus2.jpg"
-                ]
-            },
-            {
-                "scientific": "Ribes nigrum",
-                "german": "Schwarze Johannisbeere",
-                "family": "Grossulariaceae",
-                "family_german": [
-                    "Stachelbeergewächse"
-                ],
-                "images": [
-                    "ribes_nigrum1.jpg",
-                    "ribes_nigrum2.jpg"
-                ]
-            },
-            {
-                "scientific": "Rosa arvensis",
-                "german": "Kriechende Rose",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "rosa_arvensis1.jpg",
-                    "rosa_arvensis2.jpg"
-                ]
-            },
-            {
-                "scientific": "Rosa canina",
-                "german": "Hunds-Rose",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "rosa_canina1.jpg",
-                    "rosa_canina2.jpg"
-                ]
-            },
-            {
-                "scientific": "Rosa multiflora",
-                "german": "Büschel-Rose",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "rosa_multiflora1.jpg",
-                    "rosa_multiflora2.jpg"
-                ]
-            },
-            {
-                "scientific": "Rosa rubiginosa agg.",
-                "german": "Artengruppe Wein-Rose",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "rosa_rubiginosa1.jpg",
-                    "rosa_rubiginosa2.jpg"
-                ]
-            },
-            {
-                "scientific": "Rubus caesius",
-                "german": "Kratzbeere",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "rubus_caesius1.jpg",
-                    "rubus_caesius2.jpg"
-                ]
-            },
-            {
-                "scientific": "Rubus sect. Rubus",
-                "german": "Sektion Echte Brombeeren",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "rubus_sect_rubus1.jpg",
-                    "rubus_sect_rubus2.jpg"
-                ]
-            },
-            {
-                "scientific": "Rumex acetosa",
-                "german": "Wiesen-Sauer-Ampfer",
-                "family": "Polygonaceae",
-                "family_german": [
-                    "Knöterichgewächse"
-                ],
-                "images": [
-                    "rumex_acetosa1.jpg",
-                    "rumex_acetosa2.jpg"
-                ]
-            },
-            {
-                "scientific": "Rumex obtusifolius",
-                "german": "Stumpfblättriger Ampfer",
-                "family": "Polygonaceae",
-                "family_german": [
-                    "Knöterichgewächse"
-                ],
-                "images": [
-                    "rumex_obtusifolius1.jpg",
-                    "rumex_obtusifolius2.jpg"
-                ]
-            },
-            {
-                "scientific": "Salix alba",
-                "german": "Silber-Weide",
-                "family": "Salicaceae",
-                "family_german": [
-                    "Weidengewächse"
-                ],
-                "images": [
-                    "salix_alba1.jpg",
-                    "salix_alba2.jpg"
-                ]
-            },
-            {
-                "scientific": "Salix caprea",
-                "german": "Sal-Weide",
-                "family": "Salicaceae",
-                "family_german": [
-                    "Weidengewächse"
-                ],
-                "images": [
-                    "salix_caprea1.jpg",
-                    "salix_caprea2.jpg"
-                ]
-            },
-            {
-                "scientific": "Salix triandra",
-                "german": "Mandel-Weide",
-                "family": "Salicaceae",
-                "family_german": [
-                    "Weidengewächse"
-                ],
-                "images": [
-                    "salix_triandra1.jpg",
-                    "salix_triandra2.jpg"
-                ]
-            },
-            {
-                "scientific": "Sanguisorba minor",
-                "german": "Kleiner Wiesenknopf",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "sanguisorba_minor1.jpg",
-                    "sanguisorba_minor2.jpg"
-                ]
-            },
-            {
-                "scientific": "Securigera varia",
-                "german": "Bunte Kronwicke",
-                "family": "Fabaceae",
-                "family_german": [
-                    "Schmetterlingsblütler"
-                ],
-                "images": [
-                    "securigera_varia1.jpg",
-                    "securigera_varia2.jpg"
-                ]
-            },
-            {
-                "scientific": "Senecio erucifolius",
-                "german": "Raukenblättriges Greiskraut",
-                "family": "Asteraceae",
-                "family_german": [
-                    "Korbblütler"
-                ],
-                "images": [
-                    "senecio_erucifolius1.jpg",
-                    "senecio_erucifolius2.jpg"
-                ]
-            },
-            {
-                "scientific": "Sonchus asper",
-                "german": "Raue Gänsedistel",
-                "family": "Asteraceae",
-                "family_german": [
-                    "Korbblütler"
-                ],
-                "images": [
-                    "sonchus_asper1.jpg",
-                    "sonchus_asper2.jpg"
-                ]
-            },
-            {
-                "scientific": "Sorbus aucuparia",
-                "german": "Eberesche",
-                "family": "Rosaceae",
-                "family_german": [
-                    "Rosengewächse"
-                ],
-                "images": [
-                    "sorbus_aucuparia1.jpg",
-                    "sorbus_aucuparia2.jpg"
-                ]
-            },
-            {
-                "scientific": "Taraxacum sect. Ruderalia",
-                "german": "Sektion Wiesen-Löwenzähne",
-                "family": "Asteraceae",
-                "family_german": [
-                    "Korbblütler"
-                ],
-                "images": [
-                    "taraxacum_sect_ruderalia1.jpg",
-                    "taraxacum_sect_ruderalia2.jpg"
-                ]
-            },
-            {
-                "scientific": "Thymus pulegioides agg.",
-                "german": "Artengruppe Arznei-Thymian",
-                "family": "Lamiaceae",
-                "family_german": [
-                    "Lippenblütler"
-                ],
-                "images": [
-                    "thymus_pulegioides1.jpg",
-                    "thymus_pulegioides2.jpg"
-                ]
-            },
-            {
-                "scientific": "Tilia platyphyllos",
-                "german": "Sommer-Linde",
-                "family": "Malvaceae",
-                "family_german": [
-                    "Malvengewächse"
-                ],
-                "images": [
-                    "tilia_platyphyllos1.jpg",
-                    "tilia_platyphyllos2.jpg"
-                ]
-            },
-            {
-                "scientific": "Trifolium pratense",
-                "german": "Wiesen-Klee",
-                "family": "Fabaceae",
-                "family_german": [
-                    "Schmetterlingsblütler"
-                ],
-                "images": [
-                    "trifolium_pratense1.jpg",
-                    "trifolium_pratense2.jpg"
-                ]
-            },
-            {
-                "scientific": "Trifolium repens",
-                "german": "Weiß-Klee",
-                "family": "Fabaceae",
-                "family_german": [
-                    "Schmetterlingsblütler"
-                ],
-                "images": [
-                    "trifolium_repens1.jpg",
-                    "trifolium_repens2.jpg"
-                ]
-            },
-            {
-                "scientific": "Trisetum flavescens agg.",
-                "german": "Artengruppe Wiesen-Goldhafer",
-                "family": "Poaceae",
-                "family_german": [
-                    "Süßgräser"
-                ],
-                "images": [
-                    "trisetum_flavescens1.jpg",
-                    "trisetum_flavescens2.jpg"
-                ]
-            },
-            {
-                "scientific": "Urtica dioica",
-                "german": "Große Brennnessel",
-                "family": "Urticaceae",
-                "family_german": [
-                    "Brennesselgewächse"
-                ],
-                "images": [
-                    "urtica_dioica1.jpg",
-                    "urtica_dioica2.jpg"
-                ]
-            },
-            {
-                "scientific": "Valerianella locusta",
-                "german": "Gewöhnlicher Feldsalat",
-                "family": "Valerianaceae",
-                "family_german": [
-                    "Baldriangewächse"
-                ],
-                "images": [
-                    "valerianella_locusta1.jpg",
-                    "valerianella_locusta2.jpg"
-                ]
-            },
-            {
-                "scientific": "Veronica chamaedrys agg.",
-                "german": "Artengruppe Gamander-Ehrenpreis",
-                "family": "Plantaginaceae",
-                "family_german": [
-                    "Wegerichgewächse"
-                ],
-                "images": [
-                    "veronica_chamaedrys1.jpg",
-                    "veronica_chamaedrys2.jpg"
-                ]
-            },
-            {
-                "scientific": "Veronica persica",
-                "german": "Persischer Ehrenpreis",
-                "family": "Plantaginaceae",
-                "family_german": [
-                    "Wegerichgewächse"
-                ],
-                "images": [
-                    "veronica_persica1.jpg",
-                    "veronica_persica2.jpg"
-                ]
-            },
-            {
-                "scientific": "Veronica serpyllifolia",
-                "german": "Quendel-Ehrenpreis",
-                "family": "Plantaginaceae",
-                "family_german": [
-                    "Wegerichgewächse"
-                ],
-                "images": [
-                    "veronica_serpyllifolia1.jpg",
-                    "veronica_serpyllifolia2.jpg"
-                ]
-            },
-            {
-                "scientific": "Viburnum lantana",
-                "german": "Wolliger Schneeball",
-                "family": "Adoxaceae",
-                "family_german": [
-                    "Moschuskrautgewächse"
-                ],
-                "images": [
-                    "viburnum_lantana1.jpg",
-                    "viburnum_lantana2.jpg"
-                ]
-            },
-            {
-                "scientific": "Viburnum opulus",
-                "german": "Gewöhnlicher Schneeball",
-                "family": "Adoxaceae",
-                "family_german": [
-                    "Moschuskrautgewächse"
-                ],
-                "images": [
-                    "viburnum_opulus1.jpg",
-                    "viburnum_opulus2.jpg"
-                ]
-            },
-            {
-                "scientific": "Vicia sepium",
-                "german": "Zaun-Wicke",
-                "family": "Fabaceae",
-                "family_german": [
-                    "Schmetterlingsblütler"
-                ],
-                "images": [
-                    "vicia_sepium1.jpg",
-                    "vicia_sepium2.jpg"
-                ]
-            },
-            {
-                "scientific": "Viola reichenbachiana",
-                "german": "Wald-Veilchen",
-                "family": "Violaceae",
-                "family_german": [
-                    "Veilchengewächse"
-                ],
-                "images": [
-                    "viola_reichenbachiana1.jpg",
-                    "viola_reichenbachiana2.jpg"
-                ]
+        // --- Hilfsfunktionen ---
+        function shuffle(arr) {
+            let a = arr.slice();
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
             }
-        ]
-
-        const plantsPerPage = 5;
-        const plantsPerRound = 20; // Pflanzen pro Runde
-        let currentPage = 0;
-        let currentRound = 0; // Aktuelle Runde
-        let inputValues = {};
-        let introCollapsed = false;
-
-        function toggleIntro() {
-            const intro = document.getElementById('intro-text');
-            const btn = document.getElementById('toggle-intro-btn');
-            if (intro.classList.contains('collapsed')) {
-                intro.classList.remove('collapsed');
-                btn.textContent = '[I] Intro ausblenden';
-                introCollapsed = false;
-            } else {
-                intro.classList.add('collapsed');
-                btn.textContent = '[I] Intro anzeigen';
-                introCollapsed = true;
-            }
+            return a;
         }
-        document.getElementById('toggle-intro-btn').onclick = toggleIntro;
-
-        // Beim Laden: Button-Text passend setzen
-        window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('toggle-intro-btn').textContent = '[I] Intro ausblenden';
-            // Standardmäßig keine Sortierung aktiv, oder z.B. wissenschaftlich:
-            document.querySelector('button[onclick="sortPlants(\'scientific\')"]').classList.add('active-sort');
-        });
-
-        function getCurrentRoundPlants() {
-            const start = currentRound * plantsPerRound;
-            const end = Math.min(start + plantsPerRound, plants.length);
-            return plants.slice(start, end);
+        function normalize(str) {
+            // Entferne Abkürzungen aus wissenschaftlichen Namen und Präfixe aus deutschen Namen
+            return (str || '')
+                // Entferne "agg.", "sect.", "subg." (wiss. Name)
+                .replace(/\b(agg\.?|sect\.?|subg\.?)\b/gi, '')
+                // Entferne "Artengruppe", "Sektion", "Untergattung", "Gattung" (dt. Name)
+                .replace(/\b(Artengruppe|Sektion|Untergattung|Gattung)\b/gi, '')
+                .toLowerCase()
+                .replace(/[\s\-äöüß]/g, s => ({
+                    'ä':'ae','ö':'oe','ü':'ue','ß':'ss',' ':'','-':''
+                }[s]||s))
+                .replace(/[^a-z]/g,'');
         }
-
-        // Berechnung der Levenshtein-Distanz
-        function levenshtein(a, b) {
-            if (a.length === 0) return b.length;
-            if (b.length === 0) return a.length;
-            const matrix = [];
-            for (let i = 0; i <= b.length; i++) matrix[i] = [i];
-            for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
-            for (let i = 1; i <= b.length; i++) {
-                for (let j = 1; j <= a.length; j++) {
-                    if (b.charAt(i - 1) === a.charAt(j - 1)) {
-                        matrix[i][j] = matrix[i - 1][j - 1];
-                    } else {
-                        matrix[i][j] = Math.min(
-                            matrix[i - 1][j - 1] + 1, // ersetzen
-                            matrix[i][j - 1] + 1,     // einfügen
-                            matrix[i - 1][j] + 1      // löschen
-                        );
-                    }
-                }
-            }
-            return matrix[b.length][a.length];
+        function isTypo(a, b) {
+            // Levenshtein-Distanz <= 2
+            if (!a || !b) return false;
+            a = normalize(a); b = normalize(b);
+            if (a === b) return false;
+            let m = Array(a.length+1).fill().map(()=>Array(b.length+1).fill(0));
+            for(let i=0;i<=a.length;i++)m[i][0]=i;
+            for(let j=0;j<=b.length;j++)m[0][j]=j;
+            for(let i=1;i<=a.length;i++)
+                for(let j=1;j<=b.length;j++)
+                    m[i][j]=a[i-1]==b[j-1]?m[i-1][j-1]:1+Math.min(m[i-1][j],m[i][j-1],m[i-1][j-1]);
+            return m[a.length][b.length]<=2;
         }
-
-        // Entfernen von "agg.", "sect.", "subg." etc. aus wissenschaftlichen Namen und "Artengruppe", "Sektion", "Gattung", "Untergattung" aus deutschen Namen
-        function normalizePlantName(name) {
-            return name
-                .replace(/\b(agg\.?|sect\.?|subg\.?)\b/gi, '') // Abkürzungen entfernen
-                .replace(/\b(Artengruppe|Sektion|Gattung|Untergattung)\b/gi, '') // dt. Begriffe entfernen
-                .replace(/[.,]/g, '') // Punkte und Kommas entfernen
-                .replace(/\s+/g, ' ') // doppelte Leerzeichen entfernen
-                .trim()
-                .toLowerCase();
+        function saveState(key, value) {
+            try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
         }
-
-        function getAbbreviation(name) {
-            const match = name.match(/\b(agg\.?|sect\.?|subg\.?)\b/i);
-            return match ? match[1].replace('.', '').toLowerCase() : '';
+        function loadState(key, fallback) {
+            try {
+                let v = localStorage.getItem(key);
+                return v ? JSON.parse(v) : fallback;
+            } catch { return fallback; }
         }
-
+        // Hilfsfunktion zum Formatieren der wissenschaftlichen Namen
         function formatScientificName(name) {
-            // Zerlege in Wörter und setze nur die Abkürzungen nicht kursiv
             const abbrPattern = /^(agg\.?|sect\.?|subg\.?)$/i;
             return name
                 .split(/\s+/)
-                .map(word => abbrPattern.test(word) ? word : `<i>${word}</i>`)
+                .map(word => abbrPattern.test(word) ? `<span class="no-italic">${word}</span>` : `<i>${word}</i>`)
                 .join(' ');
         }
+        // --- Banner-Logik ---
+        const banner = document.getElementById('banner');
+        const bannerToggle = document.getElementById('bannerToggle');
+        const showBannerBtn = document.getElementById('showBannerBtn');
+        const versionInfoFixed = document.getElementById('versionInfoFixed');
 
-        function checkSingleAnswer(index) {
-            const plant = plants[index];
-            const scientificInput = document.getElementById(`scientific-${index}`);
-            const germanInput = document.getElementById(`german-${index}`);
-            const familyInput = document.getElementById(`family-${index}`);
-            const btn = document.getElementById(`check-btn-${index}`);
-
-            if (!scientificInput || !germanInput || !familyInput || !btn) return;
-
-            // Prüfen, ob aktuell die Lösung angezeigt wird
-            const showingSolution = btn.dataset.showingSolution === "true" || inputValues[`showingSolution-${index}`];
-
-            if (showingSolution) {
-                document.getElementById(`result-${index}`).innerHTML = btn.dataset.prevResult || inputValues[`prevResult-${index}`] || "";
-                if (
-                    scientificInput.value.trim() === '' &&
-                    germanInput.value.trim() === '' &&
-                    familyInput.value.trim() === ''
-                ) {
-                    btn.textContent = "Lösung aufdecken";
-                } else {
-                    btn.textContent = "Antwort überprüfen";
+        // Banner-Status aus Storage laden, aber nach 1 Tag automatisch wieder einblenden
+        function getBannerHidden() {
+            const obj = JSON.parse(localStorage.getItem('pflanzenquiz_banner_hidden') || 'false');
+            // Prüfe, ob ein Zeitstempel gespeichert ist
+            if (typeof obj === 'object' && obj !== null && 'hidden' in obj && 'ts' in obj) {
+                // 1 Tag (in ms)
+                if (Date.now() - obj.ts > 1 * 24 * 60 * 60 * 1000) {
+                    return false; // Nach 1 Tag wieder einblenden
                 }
-                btn.dataset.showingSolution = "";
-                inputValues[`showingSolution-${index}`] = false;
-
-                delete btn.dataset.prevScientific;
-                delete btn.dataset.prevGerman;
-                delete btn.dataset.prevFamily;
-                delete btn.dataset.prevResult;
-                delete inputValues[`prevScientific-${index}`];
-                delete inputValues[`prevGerman-${index}`];
-                delete inputValues[`prevFamily-${index}`];
-                delete inputValues[`prevResult-${index}`];
-
-                if (
-                    scientificInput.value.trim() !== '' ||
-                    germanInput.value.trim() !== '' ||
-                    familyInput.value.trim() !== ''
-                ) {
-                } else {
-                    return;
-                }
+                return obj.hidden;
             }
+            // Altes Format (nur true/false)
+            return obj;
+        }
+        function saveBannerHidden(hidden) {
+            localStorage.setItem('pflanzenquiz_banner_hidden', JSON.stringify({hidden, ts: Date.now()}));
+        }
 
-            // Eingaben normalisieren (Kleinbuchstaben und Leerzeichen entfernen)
-            const normalize = (str) => str.trim().toLowerCase();
-            const scientificValue = normalize(scientificInput.value);
-            const germanValue = normalize(germanInput.value);
-            const familyValue = normalize(familyInput.value);
+        let bannerHidden = getBannerHidden();
 
-            // Wenn alle Felder leer sind: Nur Lösung anzeigen, keine Bewertung
-            if (
-                scientificInput.value.trim() === '' &&
-                germanInput.value.trim() === '' &&
-                familyInput.value.trim() === ''
-            ) {
-                // Eingaben und Ergebnis zwischenspeichern
-                btn.dataset.prevScientific = scientificInput.value;
-                btn.dataset.prevGerman = germanInput.value;
-                btn.dataset.prevFamily = familyInput.value;
-                btn.dataset.prevResult = document.getElementById(`result-${index}`).innerHTML;
-
-                inputValues[`prevScientific-${index}`] = scientificInput.value;
-                inputValues[`prevGerman-${index}`] = germanInput.value;
-                inputValues[`prevFamily-${index}`] = familyInput.value;
-                inputValues[`prevResult-${index}`] = document.getElementById(`result-${index}`).innerHTML;
-
-                const solution = `ℹ️ Die Pflanze heißt: <b><span style="cursor:pointer;" title="Klicken zum Kopieren" onclick="copyToClipboard('${plant.scientific} (${plant.german}), ${plant.family} (${plant.family_german.join(', ')})', this)">${formatScientificName(plant.scientific)} (${plant.german}), ${plant.family} (${plant.family_german.join(', ')})</span></b>`;
-                document.getElementById(`result-${index}`).innerHTML = solution;
-                inputValues[`result-${index}`] = solution;
-                btn.textContent = "Lösung verbergen";
-                btn.dataset.showingSolution = "true";
-                inputValues[`showingSolution-${index}`] = true;
-                return;
-            }
-
-            // Wenn nur der Artname angegeben wurde, aber die Familie fehlt
-            if (
-                (scientificInput.value.trim() !== '' || germanInput.value.trim() !== '') &&
-                familyInput.value.trim() === ''
-            ) {
-                const msg = '⚠️ Bitte gib zusätzlich zum Artnamen auch die <b>Pflanzenfamilie</b> an.';
-                document.getElementById(`result-${index}`).innerHTML = msg;
-                inputValues[`result-${index}`] = msg;
-                return;
-            }
-            
-            // Wenn nur die Familie angegeben wurde, aber der Artname fehlt
-            if (
-                familyInput.value.trim() !== '' &&
-                (scientificInput.value.trim() === '' && germanInput.value.trim() === '')
-            ) {
-                const msg = '⚠️ Bitte gib zusätzlich zur Pflanzenfamilie auch den <b>Artnamen</b> an.';
-                document.getElementById(`result-${index}`).innerHTML = msg;
-                inputValues[`result-${index}`] = msg;
-                return;
-            }
-            
-            const userAbbr = getAbbreviation(scientificValue);
-            const solutionAbbr = getAbbreviation(plant.scientific);
-
-            const isScientificCorrect =
-                normalizePlantName(scientificValue) === normalizePlantName(plant.scientific) &&
-                (
-                    // Fall 1: Beide haben exakt die gleiche Abkürzung (inkl. beide keine)
-                    userAbbr === solutionAbbr
-                    // Fall 2: Lösung hat eine Abkürzung, Eingabe hat keine (z.B. "Achillea millefolium" für "... agg.")
-                    || (solutionAbbr && !userAbbr)
-                )
-                && (familyValue === normalize(plant.family) || plant.family_german.map(normalize).includes(familyValue));
-            const isGermanCorrect =
-                normalizePlantName(germanValue) === normalizePlantName(plant.german) &&
-                (familyValue === normalize(plant.family) || plant.family_german.map(normalize).includes(familyValue));
-
-            let resultText = '';
-            if (isScientificCorrect || isGermanCorrect) {
-                resultText = `✅ Richtig! Die Pflanze heißt: <b><span style="cursor:pointer;" title="Klicken zum Kopieren" onclick="copyToClipboard('${plant.scientific} (${plant.german}), ${plant.family} (${plant.family_german.join(', ')})', this)">${formatScientificName(plant.scientific)} (${plant.german}), ${plant.family} (${plant.family_german.join(', ')})</span></b>`;
+        window.updateDashedBorder = function() {
+            // Sucht die Übersichtstabelle und aktualisiert die Linie, falls vorhanden
+            const container = document.querySelector('.overview-container');
+            const table = container ? container.querySelector('.overview-table') : null;
+            if (!container || !table) return;
+            // Prüfe, ob ganz nach rechts gescrollt wurde
+            if (container.scrollWidth - container.scrollLeft - container.clientWidth < 2) {
+                container.classList.add('scrolled-end');
             } else {
-                // Unscharfe Prüfung für Tippfehler (max. 2 Zeichen Unterschied)
-                const closeScientific = levenshtein(
-                    normalizePlantName(scientificValue),
-                    normalizePlantName(plant.scientific)
-                ) <= 2;
-                const closeGerman = levenshtein(
-                    normalizePlantName(germanValue),
-                    normalizePlantName(plant.german)
-                ) <= 2;
-                const closeFamily = (
-                    levenshtein(familyValue, normalize(plant.family)) <= 2 ||
-                    plant.family_german.some(fam => levenshtein(familyValue, normalize(fam)) <= 2)
-                );
-                if (
-                    (scientificValue && closeScientific && (familyValue && closeFamily)) ||
-                    (germanValue && closeGerman && (familyValue && closeFamily))
-                ) {
-                    resultText = '⚠️ Fast richtig! <b>(Tippfehler?)</b>';
-                } else {
-                    resultText = `❌ Falsch! Richtig wäre: <b><span style="cursor:pointer;" title="Klicken zum Kopieren" onclick="copyToClipboard('${plant.scientific} (${plant.german}), ${plant.family} (${plant.family_german.join(', ')})', this)">${formatScientificName(plant.scientific)} (${plant.german}), ${plant.family} (${plant.family_german.join(', ')})</span></b>`;
-                }
+                container.classList.remove('scrolled-end');
             }
-
-            // Speichern, wenn mindestens ein Feld ausgefüllt ist
-            if (
-                scientificInput.value.trim() !== '' ||
-                germanInput.value.trim() !== '' ||
-                familyInput.value.trim() !== ''
-            ) {
-                inputValues[`scientific-${index}`] = scientificInput.value;
-                inputValues[`german-${index}`] = germanInput.value;
-                inputValues[`family-${index}`] = familyInput.value;
-                inputValues[`result-${index}`] = resultText;
-                // Zustand zurücksetzen, falls vorher Lösung angezeigt wurde
-                inputValues[`showingSolution-${index}`] = false;
+            // Links
+            if (container.scrollLeft < 2) {
+                container.classList.add('scrolled-start');
+            } else {
+                container.classList.remove('scrolled-start');
             }
+            // Höhe und Top-Position der Linie setzen
+            const rect = table.getBoundingClientRect();
+            document.documentElement.style.setProperty('--overview-table-top', rect.top + 'px');
+            document.documentElement.style.setProperty('--overview-table-height', rect.height + 'px');
+        };
 
-            document.getElementById(`result-${index}`).innerHTML = resultText;
-        }
-
-        function loadQuiz() {
-            const container = document.getElementById('quiz-container');
-            container.innerHTML = '';
-
-            const roundPlants = getCurrentRoundPlants();
-            const startIndex = currentPage * plantsPerPage;
-            const endIndex = Math.min(startIndex + plantsPerPage, roundPlants.length);
-
-            if (startIndex >= roundPlants.length) {
-                // Nach der letzten Seite der Runde: Zusammenfassung für diese Runde anzeigen
-                const correctAnswers = calculateCorrectAnswersForRound();
-                const isLastRound = (currentRound + 1) * plantsPerRound >= plants.length;
-                const correctTotal = calculateCorrectAnswers();
-
-                let headline = `Zwischenstand Runde ${currentRound + 1}`;
-                let shareButton = '';
-                if (isLastRound) {
-                    headline += ' und Gesamtauswertung';
-                    shareButton = `<button id="share-btn" style="margin-left:10px;">Ergebnis teilen</button>`;
-                }
-
-                container.innerHTML = `
-                    <div id="summary-container">
-                        <h2>${headline}</h2>
-                        <p>Du hast in dieser Runde <strong>${correctAnswers}</strong> von <strong>${roundPlants.length}</strong> Pflanzen korrekt identifiziert.</p>
-                        <p>Gesamt korrekt: <strong>${correctTotal}</strong> von <strong>${plants.length}</strong>${shareButton}</p>
-                        <div style="display: flex; margin-bottom: 20px"></div>
-                            <button onclick="prevRound()">Zurück [←]</button>
-                            ${((currentRound + 1) * plantsPerRound < plants.length)
-                                ? `<button onclick="nextRound()">[→] Nächste Runde starten</button>`
-                                : `<button onclick="restartQuiz()">Quiz neu starten</button>`}
-                    </div>
-                `;
-
-                // Teilen-Button Funktionalität (Web Share API oder Fallback)
-                if (isLastRound) {
-                    setTimeout(() => {
-                        const shareBtn = document.getElementById('share-btn');
-                        if (shareBtn) {
-                            shareBtn.onclick = function() {
-                                const text = `Mein Ergebnis beim Pflanzenquiz: ${correctTotal} von ${plants.length} Pflanzen korrekt!`;
-                                if (navigator.share) {
-                                    navigator.share({
-                                        title: 'Pflanzenquiz Ergebnis',
-                                        text: text,
-                                        url: 'kurzly.de/pflanzen'
-                                    });
-                                } else {
-                                    // Fallback: Ergebnis in die Zwischenablage kopieren
-                                    navigator.clipboard.writeText(text + ' ' + 'kurzly.de/pflanzen');
-                                    shareBtn.textContent = 'In die Zwischenablage kopiert!';
-                                    setTimeout(() => shareBtn.textContent = 'Ergebnis teilen', 2000);
-                                }
-                            };
-                        }
-                    }, 0);
-                }
-
-                // Buttons ausblenden
-                const shuffleBtn = document.getElementById('shuffle-btn');
-                const checkBtn = document.getElementById('check-btn');
-                const sortBtns = [
-                    ...document.querySelectorAll('button[onclick^="sortPlants"]')
-                ];
-                const sortLabel = document.getElementById('sort-label');
-                if (shuffleBtn) shuffleBtn.style.display = 'none';
-                if (checkBtn) checkBtn.style.display = 'none';
-                sortBtns.forEach(btn => btn.style.display = 'none');
-                if (sortLabel) sortLabel.style.display = 'none';
-
-                updatePaginationButtons();
-                return;
+        function updateBanner() {
+            banner.style.display = bannerHidden ? 'none' : '';
+            bannerToggle.style.display = bannerHidden ? 'none' : 'block';
+            showBannerBtn.style.display = bannerHidden ? 'block' : 'none';
+            // Klasse für mehr Abstand oben, wenn Banner eingeklappt ist
+            if (bannerHidden) {
+                document.body.classList.add('banner-hidden');
+            } else {
+                document.body.classList.remove('banner-hidden');
             }
-
-            for (let i = startIndex; i < endIndex; i++) {
-                const plantIndex = currentRound * plantsPerRound + i;
-                const plant = plants[plantIndex];
-                const plantDiv = document.createElement('div');
-                plantDiv.className = 'question';
-
-                const updateButtonText = (plantIndex) => {
-                    const sci = document.getElementById(`scientific-${plantIndex}`);
-                    const ger = document.getElementById(`german-${plantIndex}`);
-                    const fam = document.getElementById(`family-${plantIndex}`);
-                    const btn = document.getElementById(`check-btn-${plantIndex}`);
-                    if (!sci || !ger || !fam || !btn) return;
-                    if (
-                        sci.value.trim() === '' &&
-                        ger.value.trim() === '' &&
-                        fam.value.trim() === ''
-                    ) {
-                        btn.textContent = 'Lösung aufdecken';
-                    } else {
-                        btn.textContent = 'Antwort überprüfen';
-                    }
-                };
-
-                plantDiv.innerHTML = `
-                    <br>
-                    <h3>Pflanze ${plantIndex + 1}</h3>
-                    <div>
-                        ${plant.images.map(img => `<img src="images/${img}" alt="${plant.scientific}" width="200">`).join('')}
-                    </div>
-                    <label class="input-label">Wiss.: <span style="display:inline-block; width: 0px;"></span> <input type="text" id="scientific-${plantIndex}" value="${inputValues[`scientific-${plantIndex}`] || ''}"></label>
-                    <label class="input-label">Dt.: <span style="display:inline-block; width: 17px;"></span> <input type="text" id="german-${plantIndex}" value="${inputValues[`german-${plantIndex}`] || ''}"></label>
-                    <label class="input-label">Fam.: <span style="display:inline-block; width: 2.5px;"></span> <input type="text" id="family-${plantIndex}" value="${inputValues[`family-${plantIndex}`] || ''}"></label>
-                    <br>
-                    <button id="check-btn-${plantIndex}" onclick="checkSingleAnswer(${plantIndex})">Antwort überprüfen</button>
-                    <div class="result" id="result-${plantIndex}">${inputValues[`result-${plantIndex}`] || ''}</div>
-                `;
-                container.appendChild(plantDiv);
-
-                // Zustand des Buttons und ggf. der Lösung wiederherstellen
-                const btn = document.getElementById(`check-btn-${plantIndex}`);
-                if (inputValues[`showingSolution-${plantIndex}`]) {
-                    btn.textContent = "Lösung verbergen";
-                    btn.dataset.showingSolution = "true";
-                    // Eingaben ggf. leeren (wie beim Anzeigen der Lösung)
-                    document.getElementById(`scientific-${plantIndex}`).value = inputValues[`prevScientific-${plantIndex}`] || "";
-                    document.getElementById(`german-${plantIndex}`).value = inputValues[`prevGerman-${plantIndex}`] || "";
-                    document.getElementById(`family-${plantIndex}`).value = inputValues[`prevFamily-${plantIndex}`] || "";
-                    document.getElementById(`result-${plantIndex}`).innerHTML = inputValues[`result-${plantIndex}`] || "";
-                } else {
-                    updateButtonText(plantIndex);
-                }
-
-                ['scientific', 'german', 'family'].forEach(type => {
-                    document.getElementById(`${type}-${plantIndex}`).addEventListener('input', () => updateButtonText(plantIndex));
-                });
-            }
-
-            updatePaginationButtons();
-
-            const shuffleBtn = document.getElementById('shuffle-btn');
-            const checkBtn = document.getElementById('check-btn');
-            const sortBtns = [
-                ...document.querySelectorAll('button[onclick^="sortPlants"]')
-            ];
-            const sortLabel = document.getElementById('sort-label');
-            const isSummary = currentPage * plantsPerPage >= roundPlants.length;
-
-            if (shuffleBtn) shuffleBtn.style.display = isSummary ? 'none' : 'inline-block';
-            if (checkBtn) checkBtn.style.display = isSummary ? 'none' : 'inline-block';
-            sortBtns.forEach(btn => btn.style.display = isSummary ? 'none' : 'inline-block');
-            if (sortLabel) sortLabel.style.display = isSummary ? 'none' : 'inline-block';
-
-            updateQuizInfo();
+            setTimeout(() => window.updateDashedBorder(), 0);
         }
+        bannerToggle.onclick = () => {
+            bannerHidden = !bannerHidden;
+            saveBannerHidden(bannerHidden);
+            updateBanner();
+        };
+        showBannerBtn.onclick = () => {
+            bannerHidden = false;
+            saveBannerHidden(bannerHidden);
+            updateBanner();
+        };
+        updateBanner();
 
-        function calculateCorrectAnswersForRound() {
-            let correctCount = 0;
-            const roundPlants = getCurrentRoundPlants();
-            roundPlants.forEach((plant, i) => {
-                const plantIndex = currentRound * plantsPerRound + i;
-                const scientificValue = inputValues[`scientific-${plantIndex}`]?.trim().toLowerCase() || '';
-                const germanValue = inputValues[`german-${plantIndex}`]?.trim().toLowerCase() || '';
-                const familyValue = inputValues[`family-${plantIndex}`]?.trim().toLowerCase() || '';
-
-                const isFamilyCorrect =
-                    familyValue === plant.family.toLowerCase() ||
-                    (plant.family_german && plant.family_german.map(f => f.toLowerCase()).includes(familyValue));
-
-                const userAbbr = getAbbreviation(scientificValue);
-                const solutionAbbr = getAbbreviation(plant.scientific);
-
-                const isScientificCorrect =
-                    normalizePlantName(scientificValue) === normalizePlantName(plant.scientific) &&
-                    (
-                        userAbbr === solutionAbbr
-                        || (solutionAbbr && !userAbbr)
-                    )
-                    && (familyValue === normalize(plant.family) || plant.family_german.map(normalize).includes(familyValue));
-                const isGermanCorrect =
-                    normalizePlantName(germanValue) === normalizePlantName(plant.german) && isFamilyCorrect;
-
-                if (isScientificCorrect || isGermanCorrect) {
-                    correctCount++;
-                }
-            });
-            return correctCount;
-        }
-
-        function calculateCorrectAnswers() {
-            let correctCount = 0;
-            plants.forEach((plant, index) => {
-                const scientificValue = inputValues[`scientific-${index}`]?.trim().toLowerCase() || '';
-                const germanValue = inputValues[`german-${index}`]?.trim().toLowerCase() || '';
-                const familyValue = inputValues[`family-${index}`]?.trim().toLowerCase() || '';
-
-                const isFamilyCorrect =
-                    familyValue === plant.family.toLowerCase() ||
-                    (plant.family_german && plant.family_german.map(f => f.toLowerCase()).includes(familyValue));
-
-                const userAbbr = getAbbreviation(scientificValue);
-                const solutionAbbr = getAbbreviation(plant.scientific);
-
-                const isScientificCorrect =
-                    normalizePlantName(scientificValue) === normalizePlantName(plant.scientific) &&
-                    (
-                        userAbbr === solutionAbbr
-                        || (solutionAbbr && !userAbbr)
-                    )
-                    && (familyValue === normalize(plant.family) || plant.family_german.map(normalize).includes(familyValue));
-                const isGermanCorrect =
-                    normalizePlantName(germanValue) === normalizePlantName(plant.german) && isFamilyCorrect;
-
-                if (isScientificCorrect || isGermanCorrect) {
-                    correctCount++;
-                }
-            });
-            return correctCount;
-        }
-
-        function nextRound() {
-            currentRound++;
-            currentPage = 0;
-            loadQuiz();
-        }
-
-        function prevRound() {
-            const roundPlants = getCurrentRoundPlants();
-            const totalPages = Math.ceil(roundPlants.length / plantsPerPage);
-            currentPage = totalPages - 1;
-            loadQuiz();
-        }
-
-        function restartQuiz() {
-            currentPage = 0;
-            currentRound = 0;
-            inputValues = {};
-            loadQuiz();
-        }
-
-        function updatePaginationButtons() {
-            const paginationContainer = document.getElementById('pagination');
-            const paginationTopContainer = document.getElementById('pagination-top');
-
-            paginationContainer.innerHTML = '';
-            paginationTopContainer.innerHTML = '';
-
-            const roundPlants = getCurrentRoundPlants();
-            const totalPages = Math.ceil(roundPlants.length / plantsPerPage);
-
-            const isSummary = currentPage * plantsPerPage >= roundPlants.length;
-
-            // Ab Runde 2 führt der "Zurück"-Button auf Seite 1 der Runde zur Zusammenfassung der vorherigen Runde
-            if ((currentPage > 0 && !isSummary) || (currentPage === 0 && currentRound > 0 && !isSummary)) {
-                const prevButton = document.createElement('button');
-                prevButton.textContent = 'Zurück [←]';
-                prevButton.style.marginRight = '12px'; // Abstand zur Seitenzahl
-                prevButton.onclick = () => {
-                    if (currentPage === 0 && currentRound > 0) {
-                        currentRound--;
-                        const prevRoundPlants = getCurrentRoundPlants();
-                        currentPage = Math.ceil(prevRoundPlants.length / plantsPerPage);
-                        loadQuiz();
-                    } else {
-                        currentPage--;
-                        loadQuiz();
-                    }
-                };
-                paginationContainer.appendChild(prevButton);
-
-                const prevButtonTop = document.createElement('button');
-                prevButtonTop.textContent = 'Zurück [←]';
-                prevButtonTop.style.marginRight = '12px'; // Abstand zur Seitenzahl
-                prevButtonTop.onclick = prevButton.onclick;
-                paginationTopContainer.appendChild(prevButtonTop);
-            }
-
-            // Seitenzahl anzeigen, aber nicht auf der Zusammenfassungsseite
-            const pageInfo = document.createElement('span');
-            pageInfo.className = 'page-info' + (isSummary ? ' hide' : '');
-            pageInfo.style.margin = '0';
-            pageInfo.textContent = `Seite ${Math.min(currentPage + 1, totalPages)} von ${totalPages} (Runde ${currentRound + 1})`;
-            paginationContainer.appendChild(pageInfo.cloneNode(true));
-            paginationTopContainer.appendChild(pageInfo);
-
-            if (currentPage < totalPages && !isSummary) {
-                const nextButton = document.createElement('button');
-                if (currentPage === totalPages - 1) {
-                    nextButton.textContent = '[→] Weiter zur Auswertung';
-                } else {
-                    nextButton.textContent = '[→] Weiter';
-                }
-                nextButton.style.marginLeft = '12px'; // Abstand zur Seitenzahl
-                nextButton.onclick = () => {
-                    currentPage++;
-                    loadQuiz();
-                };
-                paginationContainer.appendChild(nextButton);
-
-                const nextButtonTop = document.createElement('button');
-                if (currentPage === totalPages - 1) {
-                    nextButtonTop.textContent = '[→] Weiter zur Auswertung';
-                } else {
-                    nextButtonTop.textContent = '[→] Weiter';
-                }
-                nextButtonTop.style.marginLeft = '12px'; // Abstand zur Seitenzahl
-                nextButtonTop.onclick = () => {
-                    currentPage++;
-                    loadQuiz();
-                };
-                paginationTopContainer.appendChild(nextButtonTop);
-            }
-        }
-
-        function checkAnswers() {
-            plants.forEach((plant, index) => {
-                const scientificInput = document.getElementById(`scientific-${index}`);
-                const germanInput = document.getElementById(`german-${index}`);
-                const familyInput = document.getElementById(`family-${index}`);
-
-                if (!scientificInput || !germanInput || !familyInput) return;
-
-                // Prüfen, ob mindestens ein Feld ausgefüllt ist
-                if (
-                    scientificInput.value.trim() === '' &&
-                    germanInput.value.trim() === '' &&
-                    familyInput.value.trim() === ''
-                ) {
-                    // Falls alle Felder leer sind, nichts tun (auch keine Markierung anzeigen)
-                    return;
-                }
-                
-                // Eingaben normalisieren (Kleinbuchstaben und Leerzeichen entfernen)
-                const normalize = (str) => str.trim().toLowerCase();
-                const scientificValue = normalize(scientificInput.value);
-                const germanValue = normalize(germanInput.value);
-                const familyValue = normalize(familyInput.value);
-
-                // Wenn nur der Artname angegeben wurde, aber die Familie fehlt
-                if (
-                    (scientificInput.value.trim() !== '' || germanInput.value.trim() !== '') &&
-                    familyInput.value.trim() === ''
-                ) {
-                    const msg = '⚠️ Bitte gib zusätzlich zum Artnamen auch die <b>Pflanzenfamilie</b> an.';
-                    document.getElementById(`result-${index}`).innerHTML = msg;
-                    inputValues[`result-${index}`] = msg;
-                    return;
-                }
-                
-                // Wenn nur die Familie angegeben wurde, aber der Artname fehlt
-                if (
-                    familyInput.value.trim() !== '' &&
-                    (scientificInput.value.trim() === '' && germanInput.value.trim() === '')
-                ) {
-                    const msg = '⚠️ Bitte gib zusätzlich zur Pflanzenfamilie auch den <b>Artnamen</b> an.';
-                    document.getElementById(`result-${index}`).innerHTML = msg;
-                    inputValues[`result-${index}`] = msg;
-                    return;
-                }
-                
-                const userAbbr = getAbbreviation(scientificValue);
-                const solutionAbbr = getAbbreviation(plant.scientific);
-
-                const isScientificCorrect =
-                    normalizePlantName(scientificValue) === normalizePlantName(plant.scientific) &&
-                    (
-                        userAbbr === solutionAbbr
-                        || (solutionAbbr && !userAbbr)
-                    )
-                    && (familyValue === normalize(plant.family) || plant.family_german.map(normalize).includes(familyValue));
-                const isGermanCorrect =
-                    normalizePlantName(germanValue) === normalizePlantName(plant.german) &&
-                    (familyValue === normalize(plant.family) || plant.family_german.map(normalize).includes(familyValue));
-
-                let resultText = '';
-                if (isScientificCorrect || isGermanCorrect) {
-                    resultText = `✅ Richtig! Die Pflanze heißt: <b><span style="cursor:pointer;" title="Klicken zum Kopieren" onclick="copyToClipboard('${plant.scientific} (${plant.german}), ${plant.family} (${plant.family_german.join(', ')})', this)">${formatScientificName(plant.scientific)} (${plant.german}), ${plant.family} (${plant.family_german.join(', ')})</span></b>`;
-                } else {
-                    // Unscharfe Prüfung für Tippfehler (max. 2 Zeichen Unterschied)
-                    const closeScientific = levenshtein(
-                        normalizePlantName(scientificValue),
-                        normalizePlantName(plant.scientific)
-                    ) <= 2;
-                    const closeGerman = levenshtein(
-                        normalizePlantName(germanValue),
-                        normalizePlantName(plant.german)
-                    ) <= 2;
-                    const closeFamily = (
-                        levenshtein(familyValue, normalize(plant.family)) <= 2 ||
-                        plant.family_german.some(fam => levenshtein(familyValue, normalize(fam)) <= 2)
-                    );
-                    if (
-                        (scientificValue && closeScientific && (familyValue && closeFamily)) ||
-                        (germanValue && closeGerman && (familyValue && closeFamily))
-                    ) {
-                        resultText = '⚠️ Fast richtig <b>(Tippfehler?)</b>';
-                    } else {
-                        resultText = `❌ Falsch! Richtig wäre: <b><span style="cursor:pointer;" title="Klicken zum Kopieren" onclick="copyToClipboard('${plant.scientific} (${plant.german}), ${plant.family} (${plant.family_german.join(', ')})', this)">${formatScientificName(plant.scientific)} (${plant.german}), ${plant.family} (${plant.family_german.join(', ')})</span></b>`;
-                    }
-                }
-
-                // Speichern, wenn mindestens ein Feld ausgefüllt ist
-                if (
-                    scientificInput.value.trim() !== '' ||
-                    germanInput.value.trim() !== '' ||
-                    familyInput.value.trim() !== ''
-                ) {
-                    inputValues[`scientific-${index}`] = scientificInput.value;
-                    inputValues[`german-${index}`] = germanInput.value;
-                    inputValues[`family-${index}`] = familyInput.value;
-                    inputValues[`result-${index}`] = resultText;
-                } else {
-                    // Ergebnis zurücksetzen, falls leer
-                    inputValues[`result-${index}`] = '';
-                }
-
-                document.getElementById(`result-${index}`).innerHTML = resultText;
-            });
-        }
-
-        function saveInputValues() {
-            const inputs = document.querySelectorAll('input[type="text"]');
-            inputs.forEach(input => {
-                inputValues[input.id] = input.value;
-            });
-        }
-
-        function shufflePlants() {
-            // Fisher-Yates-Algorithmus zum Mischen der Pflanzenliste
-            for (let i = plants.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [plants[i], plants[j]] = [plants[j], plants[i]];
-            }
-            // Eingaben und Ergebnisse zurücksetzen
-            inputValues = {};
-            currentPage = 0;
-            currentRound = 0;
-
-            // Alle Sortier-Buttons und Shuffle-Button deaktivieren
-            document.querySelectorAll('button[onclick^="sortPlants"]').forEach(btn => {
-                btn.classList.remove('active-sort');
-            });
-            const shuffleBtn = document.getElementById('shuffle-btn');
-            if (shuffleBtn) shuffleBtn.classList.add('active-sort');
-
-            loadQuiz();
-        }
-
-        function sortPlants(by) {
-            plants.sort((a, b) => {
-                let valA = '';
-                let valB = '';
-                if (by === 'scientific') {
-                    valA = a.scientific.toLowerCase();
-                    valB = b.scientific.toLowerCase();
-                } else if (by === 'german') {
-                    valA = a.german.toLowerCase();
-                    valB = b.german.toLowerCase();
-                } else if (by === 'family') {
-                    valA = a.family.toLowerCase();
-                    valB = b.family.toLowerCase();
-                }
-                return valA.localeCompare(valB, 'de');
-            });
-            // Eingaben und Ergebnisse zurücksetzen
-            inputValues = {};
-            currentPage = 0;
-            currentRound = 0;
-            // Sortier-Buttons und Shuffle-Button hervorheben/zurücksetzen
-            document.querySelectorAll('button[onclick^="sortPlants"]').forEach(btn => {
-                btn.classList.remove('active-sort');
-            });
-            const shuffleBtn = document.getElementById('shuffle-btn');
-            if (shuffleBtn) shuffleBtn.classList.remove('active-sort');
-            if (by === 'scientific') {
-                document.querySelector('button[onclick="sortPlants(\'scientific\')"]').classList.add('active-sort');
-            } else if (by === 'german') {
-                document.querySelector('button[onclick="sortPlants(\'german\')"]').classList.add('active-sort');
-            } else if (by === 'family') {
-                document.querySelector('button[onclick="sortPlants(\'family\')"]').classList.add('active-sort');
-            }
-            loadQuiz();
-        }
-
-        function getBuildDate() {
-            // Lies den Inhalt der ersten Kommentarzeile aus dem HTML-Dokument
-            const firstComment = document.childNodes[0].textContent || '';
-            const match = firstComment.match(/Stand (\d{4}-\d{2}-\d{2})/);
-            return match ? match[1] : '';
-        }
-
-        function updateQuizInfo() {
-            const roundCount = Math.ceil(plants.length / plantsPerRound);
-            const buildDate = getBuildDate();
-            document.getElementById('quiz-info').innerHTML =
-                `Zuletzt aktualisiert: ${buildDate} &nbsp;|&nbsp; <span id="plant-count">${plants.length}</span> Pflanzen &nbsp;|&nbsp; <span id="round-count">${roundCount}</span> Runden`;
-        }
-
-        document.addEventListener('keydown', function(event) {
+        // --- Banner per Taste I ein-/ausblenden ---
+        window.addEventListener('keydown', function(e) {
+            // Nur wenn KEIN Eingabefeld fokussiert ist
             const active = document.activeElement;
-            const isInput = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA');
-
-            // Pfeiltasten nur abfangen, wenn NICHT im Eingabefeld
-            if (!isInput && (event.code === 'ArrowLeft' || event.code === 'ArrowRight')) {
-                event.preventDefault();
-            }
-
-            if (event.code === 'Enter') {
-                checkAnswers();
-            } else if (event.code === 'ArrowRight') {
-                if (!isInput) {
-                    const roundPlants = getCurrentRoundPlants();
-                    const totalPages = Math.ceil(roundPlants.length / plantsPerPage);
-                    const isSummary = currentPage * plantsPerPage >= roundPlants.length;
-
-                    if (isSummary) {
-                        if ((currentRound + 1) * plantsPerRound < plants.length) {
-                            nextRound();
-                        }
-                    } else if (currentPage < totalPages) {
-                        saveInputValues();
-                        currentPage++;
-                        loadQuiz();
-                    }
-                }
-            } else if (event.code === 'ArrowLeft') {
-                if (!isInput) {
-                    const roundPlants = getCurrentRoundPlants();
-                    const isSummary = currentPage * plantsPerPage >= roundPlants.length;
-                    if (!isSummary && currentPage === 0 && currentRound > 0) {
-                        currentRound--;
-                        const prevRoundPlants = getCurrentRoundPlants();
-                        currentPage = Math.ceil(prevRoundPlants.length / plantsPerPage);
-                        loadQuiz();
-                    } else if (isSummary && currentRound > 0) {
-                        prevRound();
-                    } else if (currentPage > 0) {
-                        saveInputValues();
-                        currentPage--;
-                        loadQuiz();
-                    }
-                }
-            }
-
-            if (!isInput && (event.key === 'i' || event.key === 'I')) {
-                event.preventDefault();
-                toggleIntro();
+            if (
+                e.key.toLowerCase() === 'i' &&
+                !(active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable))
+            ) {
+                e.preventDefault();
+                bannerHidden = !bannerHidden;
+                saveBannerHidden(bannerHidden);
+                updateBanner();
             }
         });
 
-        function copyToClipboard(text, el) {
-            navigator.clipboard.writeText(text);
-            if (el) {
-                el.classList.add('copied-flash');
-                setTimeout(() => el.classList.remove('copied-flash'), 1500);
+        // --- Version Info ---
+        function updateVersionInfo() {
+            // Datum aus <meta name="build-date">
+            let codeDate = document.querySelector('meta[name="build-date"]')?.content || 'unbekannt';
+            let info = `Zuletzt aktualisiert: ${codeDate} | ${plants.length} Pflanzen | ${allRounds.length} Runden`;
+            versionInfoFixed.textContent = info;
+        }
+
+        // --- Daten laden ---
+        let plants = [];
+        localStorage.removeItem('pflanzenquiz_state');
+        let quizState = {};
+        let sortMode = quizState.sortMode || 'scientific';
+        let overviewMode = false;
+        let overviewReturnToSummary = false;
+        let allRounds = [];
+        let currentRound = 0;
+        let currentPage = 0;
+        let plantsPerRound = 20;
+        let plantsPerPage = 5;
+        let totalCorrect = 0;
+
+        // --- Quiz-Logik ---
+        function renderQuiz() {
+            // Fokus und Cursorposition merken
+            const active = document.activeElement;
+            let focusInfo = null;
+            if (active && active.classList && (active.classList.contains('input-scientific') || active.classList.contains('input-german') || active.classList.contains('input-family'))) {
+                focusInfo = {
+                    className: active.className,
+                    value: active.value,
+                    selectionStart: active.selectionStart,
+                    selectionEnd: active.selectionEnd,
+                    parentPid: active.closest('.plant-card')?.dataset.pid
+                };
+            }
+
+            const root = document.getElementById('quizRoot');
+            if (overviewMode) {
+                renderSummary(root);
+                return;
+            }
+            // Runden und Seiten berechnen
+            let roundPlants = allRounds[currentRound];
+            let pageCount = Math.ceil(roundPlants.length / plantsPerPage);
+            let pagePlants = roundPlants.slice(currentPage * plantsPerPage, (currentPage + 1) * plantsPerPage);
+
+            // Quiz Controls
+            let resetBtnText = (sortMode === 'random') ? 'Quiz zurücksetzen (neu mischen)' : 'Quiz zurücksetzen';
+            let controlsHtml = `
+            <div class="quiz-controls">
+                <label><span class="sort-label">Sortierung:</span>
+                    <select id="sortSelect">
+                        <option value="random">Zufällig</option>
+                        <option value="scientific">Wissenschaftlicher Name</option>
+                        <option value="german">Deutscher Name</option>
+                        <option value="family">Familie (wiss.)</option>
+                        <option value="family_german">Familie (dt.)</option>
+                    </select>
+                </label>
+                <button id="overviewBtn">Pflanzenübersicht</button>
+                <button id="resetQuizBtn">${resetBtnText}</button>
+            </div>
+            `;
+
+            // Quiz-Seite
+            let html = controlsHtml + `<div class="quiz-page">`;
+
+            // Navigation oben
+            html += `
+            <div class="nav-row">
+                <button class="nav-btn" id="backBtnTop" ${currentPage===0&&currentRound===0?'disabled':''}>Zurück</button>
+                <span class="page-info">Seite ${currentPage+1} von ${pageCount} (Runde ${currentRound+1})</span>
+                <button class="nav-btn" id="nextBtnTop" ${currentPage===pageCount-1?'':'enabled'}>${currentPage===pageCount-1?'Runde abschließen':'Weiter'}</button>
+            </div>
+            `;
+
+            pagePlants.forEach((plant, idx) => {
+                let pid = plant._id;
+                let state = quizState.answers?.[pid] || {};
+                let showSolution = !!state.showSolution;
+                let feedback = state.feedback || '';
+                let feedbackClass = feedback.startsWith('✅') ? 'correct'
+                    : feedback.startsWith('❌') ? 'incorrect'
+                    : feedback.startsWith('⚠️') ? (feedback.includes('Tippfehler') ? 'typo' : 'partial')
+                    : '';
+                let anyInput = (state.scientific || state.german || state.family) ? true : false;
+                let dirty = !!state.dirty;
+                // Button-Text je nach Zustand
+                let btnText = '';
+                if (!anyInput) {
+                    btnText = showSolution ? 'Lösung verbergen' : 'Lösung aufdecken';
+                } else if (showSolution && state.showFeedback && dirty) {
+                    btnText = 'Antwort erneut überprüfen';
+                } else if (!showSolution || dirty) {
+                    btnText = 'Antwort überprüfen';
+                } else {
+                    btnText = 'Lösung verbergen';
+                }
+                // Nummer berechnen (global über alle Runden)
+                let plantNumber = currentRound * plantsPerRound + currentPage * plantsPerPage + idx + 1;
+                html += `
+                <div class="plant-card" data-pid="${pid}">
+                    <div style="font-weight:bold;">
+                        Pflanze ${plantNumber}
+                    </div>
+                    <div class="plant-images">
+                        ${plant.images.map(img => `<img src="images/${img}" alt="Bild von ${plant.scientific}">`).join('')}
+                    </div>
+                    <div class="inputs-row">
+                        <input type="text" placeholder="Wissenschaftlicher Name" class="input-scientific" value="${state.scientific||''}">
+                        <input type="text" placeholder="Deutscher Name" class="input-german" value="${state.german||''}">
+                        <input type="text" placeholder="Familie" class="input-family" value="${state.family||''}">
+                        <button class="solution-btn">${btnText}</button>
+                    </div>
+                    ${
+                        showSolution && state.showFeedback && anyInput
+                            ? `<div class="feedback ${feedbackClass}">${state.feedback}</div>`
+                            : (showSolution && !anyInput
+                                ? `<div class="solution">${solutionText(plant)}</div>`
+                                : '')
+                    }
+                </div>
+                `;
+            });
+            html += `</div>`;
+
+            // Navigation
+            html += `
+            <div class="nav-row nav-row-bottom">
+                <button class="nav-btn" id="backBtn" ${currentPage===0&&currentRound===0?'disabled':''}>Zurück</button>
+                <span class="page-info">Seite ${currentPage+1} von ${pageCount} (Runde ${currentRound+1})</span>
+                <button class="nav-btn" id="nextBtn" ${currentPage===pageCount-1?'':'enabled'}>${currentPage===pageCount-1?'Runde abschließen':'Weiter'}</button>
+            </div>
+            `;
+
+            // Zwischenstand-Seite zwischen den Runden
+            if (
+                !overviewMode &&
+                currentPage === 0 &&
+                currentRound > 0 &&
+                quizState.roundResults?.[currentRound - 1] &&
+                quizState.showInterRound
+            ) {
+                let prevRound = currentRound - 1;
+                let roundCorrect = quizState.roundResults[prevRound].correct;
+                let roundTotal = allRounds[prevRound].length;
+                let html = `
+                    <div class="quiz-controls">
+                        <button id="overviewBtn">Pflanzenübersicht</button>
+                        <button id="resetQuizBtn">Quiz zurücksetzen</button>
+                    </div>
+                    <div class="nav-row">
+                        <button class="nav-btn" id="backBtnTop">Zurück</button>
+                        <span class="page-info">Dein Fortschritt</span>
+                        <button class="nav-btn" id="nextBtnTop">Nächste Runde</button>
+                    </div>
+                    <div class="stand-box">
+                        <strong>Zwischenstand Runde ${prevRound + 1}</strong><br>
+                        Du hast in dieser Runde ${roundCorrect} von ${roundTotal} Pflanzen korrekt identifiziert.<br>
+                        Gesamt korrekt: ${quizState.totalCorrect} von ${plants.length}
+                    </div>
+                `;
+                document.getElementById('quizRoot').innerHTML = html;
+
+                // Controls-Events für Übersicht und Reset
+                document.getElementById('overviewBtn').onclick = () => {
+                    overviewMode = true;
+                    renderOverview(document.getElementById('quizRoot'));
+                };
+                document.getElementById('resetQuizBtn').onclick = () => {
+                    quizState = { sortMode }; // sortMode beibehalten!
+                    overviewMode = false;
+                    setupRounds();
+                    currentRound = 0;
+                    currentPage = 0;
+                    saveState('pflanzenquiz_state', quizState);
+                    renderQuiz();
+                };
+
+                // Navigation-Events für Zwischenstand-Seite
+                document.getElementById('backBtnTop').onclick = () => {
+                    quizState.showInterRound = false;
+                    currentRound--;
+                    currentPage = Math.ceil(allRounds[currentRound].length / plantsPerPage) - 1;
+                    renderQuiz();
+                };
+                document.getElementById('nextBtnTop').onclick = () => {
+                    quizState.showInterRound = false;
+                    renderQuiz();
+                };
+
+                // Pfeiltasten-Navigation auch auf der Zusammenfassungs-Seite
+                window.onkeydown = e => {
+                    if (e.target.tagName === 'INPUT') return;
+                    if (e.key === 'ArrowLeft') document.getElementById('backBtnTop').click();
+                    if (e.key === 'ArrowRight') document.getElementById('nextBtnTop').click();
+                };
+
+                return;
+            }
+
+            root.innerHTML = html;
+
+            // Nach dem Rendern: Fokus wiederherstellen
+            if (focusInfo) {
+                const selector = `.plant-card[data-pid="${focusInfo.parentPid}"] .${focusInfo.className.split(' ').join('.')}`;
+                const input = document.querySelector(selector);
+                if (input) {
+                    input.focus();
+                    // Cursorposition wiederherstellen
+                    input.setSelectionRange(focusInfo.selectionStart, focusInfo.selectionEnd);
+                }
+            }
+
+            // Controls-Events
+            if (document.getElementById('sortSelect')) {
+                document.getElementById('sortSelect').value = sortMode;
+                document.getElementById('sortSelect').onchange = e => {
+                    sortMode = e.target.value;
+                    quizState.sortMode = sortMode;
+                    saveState('pflanzenquiz_state', quizState);
+                    setupRounds();
+                    currentRound = 0; currentPage = 0;
+                    renderQuiz();
+                };
+            }
+            document.getElementById('overviewBtn').onclick = () => {
+                overviewMode = true;
+                renderOverview(document.getElementById('quizRoot'));
+            };
+            document.getElementById('resetQuizBtn').onclick = () => {
+                quizState = { sortMode }; // sortMode beibehalten!
+                overviewMode = false;
+                setupRounds();
+                currentRound = 0;
+                currentPage = 0;
+                saveState('pflanzenquiz_state', quizState);
+                renderQuiz();
+            };
+
+            // Navigation
+            document.getElementById('backBtn').onclick = () => {
+                savePageInputs();
+                if (currentPage > 0) currentPage--;
+                else if (currentRound > 0) { 
+                    currentRound--; 
+                    currentPage = Math.ceil(allRounds[currentRound].length/plantsPerPage)-1; 
+                }
+                renderQuiz();
+            };
+            document.getElementById('nextBtn').onclick = () => {
+                savePageInputs();
+                if (currentPage < pageCount-1) {
+                    currentPage++;
+                    renderQuiz();
+                } else {
+                    // Runde abschließen: gehe zur Zwischenstand-Seite oder zur Gesamtzusammenfassung
+                    let roundCorrect = countRoundCorrect(currentRound);
+                    quizState.roundResults = quizState.roundResults || {};
+                    quizState.roundResults[currentRound] = { correct: roundCorrect };
+                    quizState.totalCorrect = countTotalCorrect();
+                    saveState('pflanzenquiz_state', quizState);
+
+                    if (currentRound < allRounds.length - 1) {
+                        // Zwischenstand-Seite aktivieren
+                        quizState.showInterRound = true;
+                        currentRound++;
+                        currentPage = 0;
+                        renderQuiz();
+                    } else {
+                        // Letzte Runde: Zeige die Gesamtzusammenfassung!
+                        overviewMode = true;
+                        renderSummary(document.getElementById('quizRoot'));
+                    }
+                }
+            };
+            // Navigation oben (Buttons verhalten sich identisch)
+            document.getElementById('backBtnTop').onclick = () => {
+                if (
+                    currentPage === 0 &&
+                    currentRound > 0 &&
+                    !overviewMode &&
+                    !quizState.showInterRound
+                ) {
+                    // Gehe zur Zwischenstandsseite der vorherigen Runde
+                    quizState.showInterRound = true;
+                    renderQuiz();
+                    return;
+                }
+                // Standardverhalten
+                savePageInputs();
+                if (currentPage > 0) currentPage--;
+                else if (currentRound > 0) { 
+                    currentRound--; 
+                    currentPage = Math.ceil(allRounds[currentRound].length/plantsPerPage)-1; 
+                }
+                renderQuiz();
+            };
+            document.getElementById('backBtn').onclick = document.getElementById('backBtnTop').onclick;
+
+            document.getElementById('nextBtnTop').onclick = document.getElementById('nextBtn').onclick;
+
+            // Pfeiltasten
+            window.onkeydown = e => {
+                if (e.target.tagName === 'INPUT') return;
+                if (e.key === 'ArrowLeft') document.getElementById('backBtn').click();
+                if (e.key === 'ArrowRight') document.getElementById('nextBtn').click();
+            };
+
+            // Eingaben & Lösungsknöpfe
+            document.querySelectorAll('.plant-card').forEach(card => {
+                let pid = card.dataset.pid;
+                let sci = card.querySelector('.input-scientific');
+                let ger = card.querySelector('.input-german');
+                let fam = card.querySelector('.input-family');
+                let btn = card.querySelector('.solution-btn');
+                sci.oninput = ger.oninput = fam.oninput = () => {
+                    let val = {
+                        scientific: sci.value,
+                        german: ger.value,
+                        family: fam.value
+                    };
+                    quizState.answers = quizState.answers || {};
+                    let prevState = quizState.answers[pid] || {};
+                    quizState.answers[pid] = Object.assign({}, prevState, val);
+
+                    if (!val.scientific && !val.german && !val.family) {
+                        quizState.answers[pid].showSolution = false;
+                        quizState.answers[pid].showFeedback = false;
+                        quizState.answers[pid].feedback = '';
+                        quizState.answers[pid].dirty = false;
+                    } else {
+                        // Wenn Feedback angezeigt wird, dirty setzen, Feedback aber NICHT neu berechnen!
+                        if (quizState.answers[pid].showSolution && quizState.answers[pid].showFeedback) {
+                            quizState.answers[pid].dirty = true;
+                            // Feedback bleibt stehen!
+                        } else {
+                            // Sonst wie gehabt
+                            quizState.answers[pid].dirty = true;
+                        }
+                    }
+                    saveState('pflanzenquiz_state', quizState);
+                };
+                btn.onclick = () => {
+                    quizState.answers = quizState.answers || {};
+                    quizState.answers[pid] = quizState.answers[pid] || {};
+                    let state = quizState.answers[pid];
+                    let anyInput = (state.scientific || state.german || state.family) ? true : false;
+                    if (!anyInput) {
+                        state.showSolution = !state.showSolution;
+                        state.showFeedback = false;
+                        state.feedback = '';
+                        state.dirty = false;
+                    } else if (!state.showSolution || state.dirty) {
+                        // Antwort überprüfen oder erneut überprüfen
+                        state.showSolution = true;
+                        state.showFeedback = true;
+                        state.feedback = checkAnswer(plants.find(p=>p._id==pid), state);
+                        state.dirty = false;
+                    } else {
+                        // Lösung verbergen
+                        state.showSolution = false;
+                        state.showFeedback = false;
+                        state.feedback = '';
+                        state.dirty = false;
+                    }
+                    saveState('pflanzenquiz_state', quizState);
+                    renderQuiz();
+                };
+            });
+        }
+
+        function savePageInputs() {
+            // Alle Eingaben auf der Seite speichern (bereits live, aber redundanzsicher)
+            document.querySelectorAll('.plant-card').forEach(card => {
+                let pid = card.dataset.pid;
+                let sci = card.querySelector('.input-scientific').value;
+                let ger = card.querySelector('.input-german').value;
+                let fam = card.querySelector('.input-family').value;
+                quizState.answers = quizState.answers || {};
+                quizState.answers[pid] = Object.assign(quizState.answers[pid]||{}, {
+                    scientific: sci, german: ger, family: fam
+                });
+            });
+            saveState('pflanzenquiz_state', quizState);
+        }
+
+        function checkAnswer(plant, input) {
+            let sci = normalize(input.scientific);
+            let ger = normalize(input.german);
+            let fam = normalize(input.family);
+            let fams = [normalize(plant.family), ...(plant.family_german||[]).map(normalize)];
+            let sciOk = sci && normalize(plant.scientific) === sci;
+            let gerOk = ger && normalize(plant.german) === ger;
+            let famOk = fam && fams.includes(fam);
+
+            // Tippfehler?
+            let sciTypo = sci && isTypo(input.scientific, plant.scientific);
+            let gerTypo = ger && isTypo(input.german, plant.german);
+            let famTypo = fam && fams.some(f => isTypo(input.family, f));
+
+            // Nur ein Feld ausgefüllt → Hinweis, egal ob richtig oder falsch
+            if (((sci || ger) && !fam)) {
+                return `⚠️ Bitte gib zusätzlich zum Artnamen auch die <b>Pflanzenfamilie</b> an.`;
+            }
+            if ((fam && !(sci || ger))) {
+                return `⚠️ Bitte gib zusätzlich zur Pflanzenfamilie auch den <b>Artnamen</b> an.`;
+            }
+
+            // Teilweise richtig: Name 1 stimmt, Familie stimmt, Name 2 ist falsch oder hat einen Tippfehler
+            if (famOk && (
+                    (sciOk && ger && (!gerOk || gerTypo)) ||
+                    (gerOk && sci && (!sciOk || sciTypo))
+                )) {
+                return `☑️ Teilweise richtig! Die Pflanze heißt: <b><span class="scientific-name">${formatScientificName(plant.scientific)}</span> (${plant.german}), ${plant.family} (${(plant.family_german||[]).join(', ')})</b>`;
+            }
+
+            // Richtig: Name 1 oder 2 oder beide stimmen, Familie stimmt, Name 2 ist korrekt oder leer
+            if (famOk && (
+                    (sciOk && (!ger || gerOk)) ||
+                    (gerOk && (!sci || sciOk)))) {
+                return `✅ Richtig! Die Pflanze heißt: <b><span class="scientific-name">${formatScientificName(plant.scientific)}</span> (${plant.german}), ${plant.family} (${(plant.family_german||[]).join(', ')})</b>`;
+            }
+
+            // Tippfehler: Namen oder Familie oder beide enthalten Tippfehler
+            if (((sciTypo || gerTypo) && famOk) ||
+                ((sciOk || gerOk) && famTypo) ||
+                ((sciTypo || gerTypo) && famTypo)) {
+                return `⚠️ Fast richtig! <b>(Tippfehler?)</b>`;
+            }
+
+            // Falsch: Kein Name oder Familie stimmt
+            if (sci || ger || fam) {
+                return `❌ Falsch! Richtig wäre: <b><span class="scientific-name">${formatScientificName(plant.scientific)}</span> (${plant.german}), ${plant.family} (${(plant.family_german||[]).join(', ')})</b>`;
+            }
+            return '';
+        }
+
+        function solutionText(plant) {
+            return `ℹ️ Die Pflanze heißt: <b><span class="scientific-name">${formatScientificName(plant.scientific)}</span> (${plant.german}), ${plant.family} (${(plant.family_german||[]).join(', ')})</b>`;
+        }
+
+        function countRoundCorrect(roundIdx) {
+            let round = allRounds[roundIdx];
+            let count = 0;
+            round.forEach(plant => {
+                let ans = quizState.answers?.[plant._id];
+                if (!ans) return;
+                let fb = checkAnswer(plant, ans);
+                if (fb.startsWith('✅') || fb.startsWith('☑️')) count++;
+            });
+            return count;
+        }
+        function countTotalCorrect() {
+            let count = 0;
+            plants.forEach(plant => {
+                let ans = quizState.answers?.[plant._id];
+                if (!ans) return;
+                let fb = checkAnswer(plant, ans);
+                if (fb.startsWith('✅') || fb.startsWith('☑️')) count++;
+            });
+            return count;
+        }
+
+        // --- Übersicht ---
+        function renderOverview(root) {
+            // Eigener Sortiermodus für die Übersicht (unabhängig vom Quiz)
+            let overviewSortMode = window.overviewSortMode || 'scientific';
+
+            let sortedPlants = plants.slice();
+            if (overviewSortMode === 'scientific') sortedPlants.sort((a, b) => a.scientific.localeCompare(b.scientific));
+            else if (overviewSortMode === 'german') sortedPlants.sort((a, b) => a.german.localeCompare(b.german));
+            else if (overviewSortMode === 'family') sortedPlants.sort((a, b) => a.family.localeCompare(b.family));
+            else if (overviewSortMode === 'family_german') {
+                sortedPlants.sort((a, b) => {
+                    let famA = (a.family_german && a.family_german.length) ? a.family_german[0] : '';
+                    let famB = (b.family_german && b.family_german.length) ? b.family_german[0] : '';
+                    return famA.localeCompare(famB);
+                });
+            }
+
+            let html = `
+                <div class="quiz-controls">
+                    <label><span class="sort-label-list">Sortierung der Pflanzenliste:</span>
+                        <select id="sortSelectOverview">
+                            <option value="scientific">Wissenschaftlicher Name</option>
+                            <option value="german">Deutscher Name</option>
+                            <option value="family">Familie (wiss.)</option>
+                            <option value="family_german">Familie (dt.)</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="nav-row overview-nav-row">
+                    <button class="nav-btn" id="backToQuizBtn" style="left:0;right:auto;">Zurück</button>
+                    <span class="page-info">Pflanzenübersicht</span>
+                </div>
+                <div class="overview-container">
+                    <table class="overview-table">
+                        <tr>
+                            <th>#</th>
+                            <th>Wissenschaftlicher Name</th>
+                            <th>Deutscher Name</th>
+                            <th>Familie (wiss.)</th>
+                            <th>Familie (dt.)</th>
+                        </tr>
+                        ${sortedPlants.map((p,i)=>`
+                            <tr>
+                                <td>${i+1}</td>
+                                <td><span class="scientific-name">${formatScientificName(p.scientific)}</span></td>
+                                <td>${p.german}</td>
+                                <td>${p.family}</td>
+                                <td>${(p.family_german||[]).join(', ')}</td>
+                            </tr>
+                        `).join('')}
+                    </table>
+                </div>
+            `;
+            root.innerHTML = html;
+
+            // Sortierauswahl setzen und Event-Handler
+            const select = document.getElementById('sortSelectOverview');
+            select.value = overviewSortMode;
+            select.onchange = e => {
+                window.overviewSortMode = e.target.value;
+                renderOverview(root);
+            };
+
+            document.getElementById('backToQuizBtn').onclick = () => {
+                if (overviewReturnToSummary) {
+                    overviewReturnToSummary = false;
+                    renderSummary(document.getElementById('quizRoot'));
+                } else {
+                    overviewMode = false;
+                    renderQuiz();
+                }
+            };
+
+            const container = document.querySelector('.overview-container');
+            const table = container.querySelector('.overview-table');
+
+            function updateDashedBorder() {
+                if (!container || !table) return;
+                // Prüfe, ob ganz nach rechts gescrollt wurde
+                if (container.scrollWidth - container.scrollLeft - container.clientWidth < 2) {
+                    container.classList.add('scrolled-end');
+                } else {
+                    container.classList.remove('scrolled-end');
+                }
+                // Links
+                if (container.scrollLeft < 2) {
+                    container.classList.add('scrolled-start');
+                } else {
+                    container.classList.remove('scrolled-start');
+                }
+                // Höhe und Top-Position der Linie setzen
+                const rect = table.getBoundingClientRect();
+                document.documentElement.style.setProperty('--overview-table-top', rect.top + 'px');
+                document.documentElement.style.setProperty('--overview-table-height', rect.height + 'px');
+            }
+            container.addEventListener('scroll', updateDashedBorder);
+            window.addEventListener('resize', updateDashedBorder);
+            window.addEventListener('scroll', updateDashedBorder);
+            window.updateDashedBorder = updateDashedBorder;
+            updateDashedBorder();
+
+            window.onkeydown = function(e) {
+                if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable)) return;
+                if (e.key === 'ArrowLeft') {
+                    document.getElementById('backToQuizBtn').click();
+                }
+            };
+        }
+
+        // --- Gesamtzusammenfassung ---
+        function renderSummary(root) {
+            // Korrekte pro Runde berechnen
+            let summaryRows = allRounds.map((round, i) => {
+                let correct = quizState.roundResults?.[i]?.correct ?? 0;
+                return `<tr>
+                    <td>${i+1}</td>
+                    <td>${correct} / ${round.length}</td>
+                </tr>`;
+            }).join('');
+            let total = quizState.totalCorrect || 0;
+            let totalPlants = plants.length;
+
+            // Teilen-Text
+            let shareText = `Ich habe beim Pflanzenquiz ${total} von ${totalPlants} Arten korrekt bestimmt! 🌱`;
+            let shareUrl = "https://kurzly.de/pflanzen";
+            let shareData = {
+                title: 'Pflanzenquiz-Ergebnis',
+                text: shareText,
+                url: shareUrl
+            };
+
+            let html = `
+                <div class="quiz-controls">
+                    <button id="overviewBtn">Pflanzenübersicht</button>
+                </div>
+                <div class="nav-row">
+                    <button class="nav-btn" id="backToQuizBtn" style="left:0;right:auto;">Zurück</button>
+                    <span class="page-info">Gesamt<span class="mobile-hyphen">-</span><span class="mobile-break"></span>ergebnis</span>
+                    <button class="nav-btn" id="restartBtn" style="right:0;left:auto;">Quiz neu starten</button>
+                </div>
+                <div class="stand-box">
+                    <b>Du hast insgesamt ${total} von ${totalPlants} Pflanzen korrekt identifiziert!</b>
+                </div>
+                <table class="overview-table" style="max-width:400px;margin:2em auto;">
+                    <tr>
+                        <th>Runde</th>
+                        <th>Korrekt</th>
+                    </tr>
+                    ${summaryRows}
+                </table>
+                <div style="text-align:center;margin:2em 0;position:relative;">
+                    <button class="nav-btn" id="shareBtn">Ergebnis teilen</button>
+                </div>
+            `;
+            root.innerHTML = html;
+
+            // Event-Handler:
+            document.getElementById('backToQuizBtn').onclick = () => {
+                overviewMode = false;
+                renderQuiz();
+            };
+            document.getElementById('overviewBtn').onclick = () => {
+                overviewMode = true;
+                overviewReturnToSummary = true;
+                renderOverview(document.getElementById('quizRoot'));
+            };
+            document.getElementById('restartBtn').onclick = () => {
+                quizState = { sortMode }; // sortMode beibehalten!
+                overviewMode = false;
+                setupRounds();
+                currentRound = 0;
+                currentPage = 0;
+                saveState('pflanzenquiz_state', quizState);
+                renderQuiz();
+            };
+            document.getElementById('shareBtn').onclick = async () => {
+                let oldInfo = document.getElementById('shareInfo');
+                if (oldInfo) oldInfo.remove();
+                if (navigator.share) {
+                    try { await navigator.share(shareData); } catch {}
+                } else {
+                    try {
+                        await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+                        const btn = document.getElementById('shareBtn');
+                        const info = document.createElement('div');
+                        info.id = 'shareInfo';
+                        info.className = 'share-info';
+                        info.textContent = 'Link zum Ergebnis wurde in die Zwischenablage kopiert.';
+                        info.style.top = (btn.offsetTop + btn.offsetHeight + 6) + 'px';
+                        const btnContainer = btn.parentElement;
+                        btnContainer.style.position = 'relative';
+                        btnContainer.appendChild(info);
+                        setTimeout(() => {
+                            info.style.opacity = '0';
+                            setTimeout(() => info.remove(), 700);
+                        }, 2200);
+                    } catch {}
+                }
+            };
+            // Pfeiltasten-Navigation
+            window.onkeydown = e => {
+                if (e.target.tagName === 'INPUT') return;
+                if (e.key === 'ArrowLeft') {
+                    const btn = document.getElementById('backToQuizBtn');
+                    if (btn) btn.click();
+                }
+            };
+        }
+
+        // --- Runden vorbereiten ---
+        function setupRounds() {
+            let sorted;
+            if (sortMode === 'scientific') sorted = plants.slice().sort((a,b)=>a.scientific.localeCompare(b.scientific));
+            else if (sortMode === 'german') sorted = plants.slice().sort((a,b)=>a.german.localeCompare(b.scientific));
+            else if (sortMode === 'family') sorted = plants.slice().sort((a,b)=>a.family.localeCompare(b.scientific));
+            else if (sortMode === 'family_german') {
+                sorted = plants.slice().sort((a, b) => {
+                    let famA = (a.family_german && a.family_german.length) ? a.family_german[0] : '';
+                    let famB = (b.family_german && b.family_german.length) ? b.family_german[0] : '';
+                    return famA.localeCompare(famB);
+                });
+            }
+            else sorted = shuffle(plants);
+            allRounds = [];
+            for (let i=0; i<sorted.length; i+=plantsPerRound) {
+                allRounds.push(sorted.slice(i, i+plantsPerRound));
             }
         }
 
-        loadQuiz();
+        // --- Daten laden und Initialisierung ---
+        fetch('plants.json')
+            .then(r=>r.json())
+            .then(data=>{
+                plants = data.map((p,i)=>Object.assign({_id:i},p));
+                setupRounds();
+                updateVersionInfo();
+                renderQuiz();
+            })
+            .catch(e=>{
+                document.getElementById('quizRoot').innerHTML = '<div style="color:red">Fehler beim Laden der Pflanzenliste.</div>';
+            });
+
+        window.addEventListener('keydown', function(e) {
+            // ENTER-Taste
+            if (e.key === 'Enter') {
+                const active = document.activeElement;
+                // Prüfe, ob ein Eingabefeld (auf der Quiz-Seite) fokussiert ist
+                if (
+                    active &&
+                    active.classList &&
+                    (active.classList.contains('input-scientific') ||
+                     active.classList.contains('input-german') ||
+                     active.classList.contains('input-family'))
+                ) {
+                    // Finde zugehörigen Button in der gleichen plant-card
+                    const card = active.closest('.plant-card');
+                    if (card) {
+                        const btn = card.querySelector('.solution-btn');
+                        if (btn) {
+                            btn.click();
+                            e.preventDefault();
+                        }
+                    }
+                } else {
+                    // Kein Eingabefeld fokussiert: alle Lösungsknöpfe auf der Seite betätigen
+                    const cards = document.querySelectorAll('.plant-card');
+                    if (!cards.length) return;
+
+                    // Prüfe, ob ALLE Lösungen aufgedeckt sind (showSolution==true)
+                    const allShown = Array.from(cards).every(card => {
+                        const pid = card.dataset.pid;
+                        const state = window.quizState?.answers?.[pid];
+                        return state && state.showSolution;
+                    });
+
+                    cards.forEach(card => {
+                        const btn = card.querySelector('.solution-btn');
+                        const pid = card.dataset.pid;
+                        const state = window.quizState?.answers?.[pid];
+                        if (btn) {
+                            // Wenn alle aufgedeckt: verbergen, sonst aufdecken
+                            if (allShown && state && state.showSolution) {
+                                btn.click();
+                            } else if (!allShown && (!state || !state.showSolution)) {
+                                btn.click();
+                            }
+                        }
+                    });
+                    e.preventDefault();
+                }
+            }
+        });
     </script>
 </body>
 </html>

@@ -1227,7 +1227,7 @@
                     ${summaryRows}
                 </table>
                 <div style="text-align:center;margin:2em 0;position:relative;">
-                    <button class="nav-btn" id="shareBtn">Ergebnis teilen</button>
+                    <button class="nav-btn" id="shareBtn" type="button">Ergebnis teilen</button>
                 </div>
             `;
             root.innerHTML = html;
@@ -1251,28 +1251,48 @@
                 saveState('pflanzenquiz_state', quizState);
                 renderQuiz();
             };
+            // Event-Handler für Teilen-Button:
             document.getElementById('shareBtn').onclick = async () => {
                 let oldInfo = document.getElementById('shareInfo');
                 if (oldInfo) oldInfo.remove();
+                let infoText = '';
+                let success = false;
                 if (navigator.share) {
-                    try { await navigator.share(shareData); } catch {}
-                } else {
+                    try {
+                        await navigator.share(shareData);
+                        success = true;
+                    } catch (e) {
+                        infoText = 'Teilen abgebrochen oder nicht möglich.';
+                    }
+                } else if (navigator.clipboard && window.isSecureContext) {
                     try {
                         await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
-                        const btn = document.getElementById('shareBtn');
-                        const info = document.createElement('div');
-                        info.id = 'shareInfo';
-                        info.className = 'share-info';
-                        info.textContent = 'Link zum Ergebnis wurde in die Zwischenablage kopiert.';
-                        info.style.top = (btn.offsetTop + btn.offsetHeight + 6) + 'px';
-                        const btnContainer = btn.parentElement;
-                        btnContainer.style.position = 'relative';
-                        btnContainer.appendChild(info);
-                        setTimeout(() => {
-                            info.style.opacity = '0';
-                            setTimeout(() => info.remove(), 700);
-                        }, 2200);
-                    } catch {}
+                        infoText = 'Link zum Ergebnis wurde in die Zwischenablage kopiert.';
+                        success = true;
+                    } catch {
+                        infoText = 'Kopieren in die Zwischenablage nicht möglich.';
+                    }
+                } else {
+                    // Fallback: Text in ein Prompt zum manuellen Kopieren anzeigen
+                    window.prompt('Teile dein Ergebnis:\nKopiere den folgenden Text:', `${shareText}\n${shareUrl}`);
+                    infoText = 'Du kannst den Link jetzt manuell kopieren.';
+                    success = true;
+                }
+                // Info anzeigen, wenn sinnvoll
+                if (infoText) {
+                    const btn = document.getElementById('shareBtn');
+                    const info = document.createElement('div');
+                    info.id = 'shareInfo';
+                    info.className = 'share-info';
+                    info.textContent = infoText;
+                    info.style.top = (btn.offsetTop + btn.offsetHeight + 6) + 'px';
+                    const btnContainer = btn.parentElement;
+                    btnContainer.style.position = 'relative';
+                    btnContainer.appendChild(info);
+                    setTimeout(() => {
+                        info.style.opacity = '0';
+                        setTimeout(() => info.remove(), 700);
+                    }, success ? 2200 : 3500);
                 }
             };
             // Pfeiltasten-Navigation

@@ -1,4 +1,4 @@
-<!-- Skript erstellt von Aaron Tholl in Visual Studio Code, Stand 2025-06-26 -->
+<!-- Skript erstellt von Aaron Tholl in Visual Studio Code, Stand 2025-06-27 -->
 
 <!DOCTYPE html>
 <html lang="de">
@@ -89,7 +89,8 @@
             gap: 1em;
             margin-bottom: 0;
             flex-wrap: wrap;
-            margin-bottom: 2px;
+            margin-top: 44px;
+            margin-bottom: 34px;
         }
         .quiz-controls label {
             font-weight: 500;
@@ -179,7 +180,10 @@
             text-align: center;
             justify-content: space-between;
             margin-top: 32px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
+        }
+        .nav-row-top {
+            margin-top: 0;
         }
         .nav-row .nav-btn {
             position: absolute;
@@ -223,25 +227,30 @@
             padding: 1.2em 2em;
             text-align: center;
             font-size: 1em;
-            margin-top: 42px;
+            margin-top: 34px;
         }
         .overview-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 44px;
             font-size: 0.85em;
         }
         .overview-table th,
         .overview-table td {
+            height: 2   em;
             border: 1px solid #b2dfdb;
             padding: 0.5em 0.7em;
             text-align: left;
+            vertical-align: middle;
         }
         .overview-table th {
             background: #e0f2e9;
         }
         .overview-table tr:nth-child(even) {
             background: #f7f7f7;
+        }
+        .summary-table {
+            max-width: 400px;
+            margin: 32px auto 2em auto;
         }
         .share-info {
             position: absolute;
@@ -250,7 +259,7 @@
             background: #e8f5e9;
             border: 1px solid #b2dfdb;
             border-radius: 4px;
-            padding: 0.2em 1em;
+            padding: 0.3em 1em;
             font-size: 0.75em;
             color: #388e3c;
             box-shadow: 0 2px 8px #0001;
@@ -259,6 +268,7 @@
             opacity: 1;
             text-align: center;
             min-width: 120px;
+            white-space: nowrap;
         }
         .scientific-name {
             font-style: italic;
@@ -273,7 +283,7 @@
         .mobile-break { 
             display: none; 
         }
-        @media (max-width: 700px) {
+        @media (max-width: 725px) {
             .plant-images img {
                 height: 240px;
             }
@@ -287,11 +297,6 @@
                 width: 100%;
                 box-sizing: border-box;
             }
-            .share-info {
-                font-size: 1em;
-                padding: 0.3em 0.5em;
-                margin-top: -2.75em;
-            }
             .plant-card {
                 padding: 0.75em 0.75em;
             }
@@ -301,25 +306,31 @@
             .quiz-page {
                 gap: 1em;
             }
+            .quiz-controls {
+                margin-top: 18px;
+            }
             .overview-table {
                 font-size: 0.85em;
-                margin-top: 16px;
                 width: max-content;
                 min-width: 100vw;
                 position: relative;
                 width: 100% !important;
                 min-width: 0 !important;
             }
+            .overview-table th,
+            .overview-table td {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
             .nav-row {
                 display: flex;
                 flex-direction: row;
                 align-items: stretch;
-                margin-top: 30px;
-                margin-bottom: 0;
             }
             .nav-row .nav-btn {
                 width: 30vw;
-                min-width: 90px;
+                max-width: 160px;
                 height: 3.5em;
                 position: static;
                 white-space: normal;
@@ -337,6 +348,7 @@
                 white-space: nowrap;
                 white-space: pre-line;
                 align-items: center;
+                margin-top: 5px;
             }
             .nav-row-bottom {
                 margin-bottom: -16px;
@@ -406,12 +418,23 @@
             #versionInfoFixed {
                 position: static !important;
                 margin-top: 13px;
-                margin-right: 32px;
+                margin-right: 0;
+                display: flex;
+                justify-content: center;
             }
             .top-bar-mobile {
                 display: flex;
                 flex-direction: column;
-                align-items: flex-end;
+                align-items: stretch;
+                background: #e0f2e9;
+                border-bottom: 2px solid #b2dfdb;
+                margin-bottom: 13px;
+                box-sizing: border-box;
+                padding-left: 31px;
+                padding-right: 32px;
+            }
+            .banner-toggle {
+                margin-left: 0;
             }
             #bannerToggle,
             #showBannerBtn {
@@ -419,7 +442,6 @@
                 float: none;
                 margin-top: 13px;
                 margin-bottom: 13px;
-                margin-right: 32px;
             }
             .banner {
                 padding-top: env(safe-area-inset-top, 0);
@@ -438,7 +460,7 @@
                 display: none;
             }
         }
-        @media (min-width: 701px) {
+        @media (min-width: 726px) {
             body.banner-hidden .versioninfo-spacer {
                 height: 46px;
                 display: block;
@@ -658,35 +680,35 @@
             let pageCount = Math.ceil(roundPlants.length / plantsPerPage);
             let pagePlants = roundPlants.slice(currentPage * plantsPerPage, (currentPage + 1) * plantsPerPage);
 
+            // Navigation oben
+            let navHtmlTop = `
+                <div class="nav-row nav-row-top">
+                    <button class="nav-btn" id="backBtnTop" ${currentPage===0&&currentRound===0?'disabled':''}>Zurück</button>
+                    <span class="page-info">Seite ${currentPage+1} von ${pageCount} (Runde ${currentRound+1})</span>
+                    <button class="nav-btn" id="nextBtnTop" ${currentPage===pageCount-1?'':'enabled'}>${currentPage===pageCount-1?'Runde abschließen':'Weiter'}</button>
+                </div>
+            `;
+
             // Quiz Controls
             let resetBtnText = (sortMode === 'random') ? 'Quiz zurücksetzen (neu mischen)' : 'Quiz zurücksetzen';
             let controlsHtml = `
-            <div class="quiz-controls">
-                <label><span class="sort-label">Sortierung:</span>
-                    <select id="sortSelect">
-                        <option value="random">Zufällig</option>
-                        <option value="scientific">Wissenschaftlicher Name</option>
-                        <option value="german">Deutscher Name</option>
-                        <option value="family">Familie (wiss.)</option>
-                        <option value="family_german">Familie (dt.)</option>
-                    </select>
-                </label>
-                <button id="overviewBtn">Pflanzenübersicht</button>
-                <button id="resetQuizBtn">${resetBtnText}</button>
-            </div>
+                <div class="quiz-controls">
+                    <label><span class="sort-label">Sortierung:</span>
+                        <select id="sortSelect">
+                            <option value="random">Zufällig</option>
+                            <option value="scientific">Wissenschaftlicher Name</option>
+                            <option value="german">Deutscher Name</option>
+                            <option value="family">Familie (wiss.)</option>
+                            <option value="family_german">Familie (dt.)</option>
+                        </select>
+                    </label>
+                    <button id="overviewBtn">Pflanzenübersicht</button>
+                    <button id="resetQuizBtn">${resetBtnText}</button>
+                </div>
             `;
 
             // Quiz-Seite
-            let html = controlsHtml + `<div class="quiz-page">`;
-
-            // Navigation oben
-            html += `
-            <div class="nav-row">
-                <button class="nav-btn" id="backBtnTop" ${currentPage===0&&currentRound===0?'disabled':''}>Zurück</button>
-                <span class="page-info">Seite ${currentPage+1} von ${pageCount} (Runde ${currentRound+1})</span>
-                <button class="nav-btn" id="nextBtnTop" ${currentPage===pageCount-1?'':'enabled'}>${currentPage===pageCount-1?'Runde abschließen':'Weiter'}</button>
-            </div>
-            `;
+            let html = navHtmlTop + controlsHtml + `<div class="quiz-page">`;
 
             pagePlants.forEach((plant, idx) => {
                 let pid = plant._id;
@@ -718,7 +740,7 @@
                         Pflanze ${plantNumber}
                     </div>
                     <div class="plant-images">
-                        ${plant.images.map(img => `<img src="images/${img}" alt="Bild von ${plant.scientific}">`).join('')}
+                        ${plant.images.map(img => `<img src="images/${img}" alt="${plant.scientific}">`).join('')}
                     </div>
                     <div class="inputs-row">
                         <input type="text" placeholder="Wissenschaftlicher Name" class="input-scientific" value="${state.scientific||''}">
@@ -759,14 +781,14 @@
                 let roundCorrect = quizState.roundResults[prevRound].correct;
                 let roundTotal = allRounds[prevRound].length;
                 let html = `
-                    <div class="quiz-controls">
-                        <button id="overviewBtn">Pflanzenübersicht</button>
-                        <button id="resetQuizBtn">Quiz zurücksetzen</button>
-                    </div>
-                    <div class="nav-row">
+                    <div class="nav-row nav-row-top">
                         <button class="nav-btn" id="backBtnTop">Zurück</button>
                         <span class="page-info">Dein Fortschritt</span>
                         <button class="nav-btn" id="nextBtnTop">Nächste Runde</button>
+                    </div>
+                    <div class="quiz-controls">
+                        <button id="overviewBtn">Pflanzenübersicht</button>
+                        <button id="resetQuizBtn">Quiz zurücksetzen</button>
                     </div>
                     <div class="stand-box">
                         <strong>Zwischenstand Runde ${prevRound + 1}</strong><br>
@@ -841,6 +863,7 @@
             document.getElementById('overviewBtn').onclick = () => {
                 overviewMode = true;
                 renderOverview(document.getElementById('quizRoot'));
+                scrollToTop();
             };
             document.getElementById('resetQuizBtn').onclick = () => {
                 quizState = { sortMode }; // sortMode beibehalten!
@@ -850,6 +873,7 @@
                 currentPage = 0;
                 saveState('pflanzenquiz_state', quizState);
                 renderQuiz();
+                scrollToTop();
             };
 
             // Navigation
@@ -861,12 +885,14 @@
                     currentPage = Math.ceil(allRounds[currentRound].length/plantsPerPage)-1; 
                 }
                 renderQuiz();
+                scrollToTop();
             };
             document.getElementById('nextBtn').onclick = () => {
                 savePageInputs();
                 if (currentPage < pageCount-1) {
                     currentPage++;
                     renderQuiz();
+                    scrollToTop();
                 } else {
                     // Runde abschließen: gehe zur Zwischenstand-Seite oder zur Gesamtzusammenfassung
                     let roundCorrect = countRoundCorrect(currentRound);
@@ -881,10 +907,12 @@
                         currentRound++;
                         currentPage = 0;
                         renderQuiz();
+                        scrollToTop();
                     } else {
                         // Letzte Runde: Zeige die Gesamtzusammenfassung!
                         overviewMode = true;
                         renderSummary(document.getElementById('quizRoot'));
+                        scrollToTop();
                     }
                 }
             };
@@ -899,6 +927,7 @@
                     // Gehe zur Zwischenstandsseite der vorherigen Runde
                     quizState.showInterRound = true;
                     renderQuiz();
+                    scrollToTop();
                     return;
                 }
                 // Standardverhalten
@@ -909,10 +938,10 @@
                     currentPage = Math.ceil(allRounds[currentRound].length/plantsPerPage)-1; 
                 }
                 renderQuiz();
+                scrollToTop();
             };
-            document.getElementById('backBtn').onclick = document.getElementById('backBtnTop').onclick;
-
             document.getElementById('nextBtnTop').onclick = document.getElementById('nextBtn').onclick;
+            document.getElementById('backBtn').onclick = document.getElementById('backBtnTop').onclick;
 
             // Pfeiltasten
             window.onkeydown = e => {
@@ -1094,6 +1123,10 @@
             }
 
             let html = `
+                <div class="nav-row nav-row-top overview-nav-row">
+                    <button class="nav-btn" id="backToQuizBtn" style="left:0;right:auto;">Zurück</button>
+                    <span class="page-info">Pflanzenübersicht</span>
+                </div>
                 <div class="quiz-controls">
                     <label><span class="sort-label-list">Sortierung der Pflanzenliste:</span>
                         <select id="sortSelectOverview">
@@ -1103,10 +1136,6 @@
                             <option value="family_german">Familie (dt.)</option>
                         </select>
                     </label>
-                </div>
-                <div class="nav-row overview-nav-row">
-                    <button class="nav-btn" id="backToQuizBtn" style="left:0;right:auto;">Zurück</button>
-                    <span class="page-info">Pflanzenübersicht</span>
                 </div>
                 <div class="overview-container">
                     <table class="overview-table">
@@ -1147,6 +1176,7 @@
                     overviewMode = false;
                     renderQuiz();
                 }
+                scrollToTop();
             };
 
             const container = document.querySelector('.overview-container');
@@ -1208,18 +1238,18 @@
             };
 
             let html = `
-                <div class="quiz-controls">
-                    <button id="overviewBtn">Pflanzenübersicht</button>
-                </div>
-                <div class="nav-row">
+                <div class="nav-row nav-row-top">
                     <button class="nav-btn" id="backToQuizBtn" style="left:0;right:auto;">Zurück</button>
                     <span class="page-info">Gesamt<span class="mobile-hyphen">-</span><span class="mobile-break"></span>ergebnis</span>
                     <button class="nav-btn" id="restartBtn" style="right:0;left:auto;">Quiz neu starten</button>
                 </div>
+                <div class="quiz-controls">
+                    <button id="overviewBtn">Pflanzenübersicht</button>
+                </div>
                 <div class="stand-box">
                     <b>Du hast insgesamt ${total} von ${totalPlants} Pflanzen korrekt identifiziert!</b>
                 </div>
-                <table class="overview-table" style="max-width:400px;margin:2em auto;">
+                <table class="overview-table summary-table">
                     <tr>
                         <th>Runde</th>
                         <th>Korrekt</th>
@@ -1236,11 +1266,13 @@
             document.getElementById('backToQuizBtn').onclick = () => {
                 overviewMode = false;
                 renderQuiz();
+                scrollToTop();
             };
             document.getElementById('overviewBtn').onclick = () => {
                 overviewMode = true;
                 overviewReturnToSummary = true;
                 renderOverview(document.getElementById('quizRoot'));
+                scrollToTop();
             };
             document.getElementById('restartBtn').onclick = () => {
                 quizState = { sortMode }; // sortMode beibehalten!
@@ -1250,6 +1282,7 @@
                 currentPage = 0;
                 saveState('pflanzenquiz_state', quizState);
                 renderQuiz();
+                scrollToTop();
             };
             // Event-Handler für Teilen-Button:
             document.getElementById('shareBtn').onclick = async () => {
@@ -1264,7 +1297,7 @@
                     } catch (e) {
                         infoText = 'Teilen abgebrochen oder nicht möglich.';
                     }
-                } else if (navigator.clipboard && window.isSecureContext) {
+                } else if (navigator.clipboard) {
                     try {
                         await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
                         infoText = 'Link zum Ergebnis wurde in die Zwischenablage kopiert.';
@@ -1274,7 +1307,7 @@
                     }
                 } else {
                     // Fallback: Text in ein Prompt zum manuellen Kopieren anzeigen
-                    window.prompt('Teile dein Ergebnis:\nKopiere den folgenden Text:', `${shareText}\n${shareUrl}`);
+                    window.prompt('Kopiere den folgenden Text, um dein Ergebnis zu teilen:', `${shareText}\n${shareUrl}`);
                     infoText = 'Du kannst den Link jetzt manuell kopieren.';
                     success = true;
                 }
@@ -1388,6 +1421,11 @@
                 }
             }
         });
+
+        // Hilfsfunktion zum Scrollen nach ganz oben
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'auto' });
+        }
     </script>
 </body>
 </html>

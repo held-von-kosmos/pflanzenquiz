@@ -1,4 +1,4 @@
-<!-- Skript erstellt von Aaron Tholl in Visual Studio Code, Stand 2025-06-27 -->
+<!-- Skript erstellt von Aaron Tholl in Visual Studio Code, Stand 2025-07-08 -->
 
 <!DOCTYPE html>
 <html lang="de">
@@ -7,7 +7,7 @@
     <title>🌱 Pflanzen des Universitätscampus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Build-Datum als Meta-Tag für Versionsinfo -->
-    <meta name="build-date" content="2025-06-24">
+    <meta name="build-date" content="2025-07-02">
     <style>
         body {
             font-family: system-ui, Arial, sans-serif;
@@ -1112,7 +1112,7 @@
 
             let sortedPlants = plants.slice();
             if (overviewSortMode === 'scientific') sortedPlants.sort((a, b) => a.scientific.localeCompare(b.scientific));
-            else if (overviewSortMode === 'german') sortedPlants.sort((a, b) => a.german.localeCompare(b.german));
+            else if (overviewSortMode === 'german') sortedPlants.sort((a, b) => stripGermanPrefix(a.german).localeCompare(stripGermanPrefix(b.german)));
             else if (overviewSortMode === 'family') sortedPlants.sort((a, b) => a.family.localeCompare(b.family));
             else if (overviewSortMode === 'family_german') {
                 sortedPlants.sort((a, b) => {
@@ -1257,7 +1257,7 @@
                     ${summaryRows}
                 </table>
                 <div style="text-align:center;margin:2em 0;position:relative;">
-                    <button class="nav-btn" id="shareBtn" type="button">Ergebnis teilen</button>
+                    <button class="nav-btn" id="resultBtn" type="button">Ergebnis kopieren</button>
                 </div>
             `;
             root.innerHTML = html;
@@ -1285,14 +1285,15 @@
                 scrollToTop();
             };
             // Event-Handler für Teilen-Button:
-            document.getElementById('shareBtn').onclick = async () => {
-                let oldInfo = document.getElementById('shareInfo');
+            document.getElementById('resultBtn').onclick = async () => {
+                let oldInfo = document.getElementById('resultInfo');
                 if (oldInfo) oldInfo.remove();
                 let infoText = '';
                 let success = false;
                 if (navigator.share) {
                     try {
                         await navigator.share(shareData);
+                        infoText = 'Teilen erfolgreich!';
                         success = true;
                     } catch (e) {
                         infoText = 'Teilen abgebrochen oder nicht möglich.';
@@ -1306,16 +1307,15 @@
                         infoText = 'Kopieren in die Zwischenablage nicht möglich.';
                     }
                 } else {
-                    // Fallback: Text in ein Prompt zum manuellen Kopieren anzeigen
-                    window.prompt('Kopiere den folgenden Text, um dein Ergebnis zu teilen:', `${shareText}\n${shareUrl}`);
+                    window.prompt('Kopiere den folgenden Text:', `${shareText}\n${shareUrl}`);
                     infoText = 'Du kannst den Link jetzt manuell kopieren.';
                     success = true;
                 }
                 // Info anzeigen, wenn sinnvoll
                 if (infoText) {
-                    const btn = document.getElementById('shareBtn');
+                    const btn = document.getElementById('resultBtn');
                     const info = document.createElement('div');
-                    info.id = 'shareInfo';
+                    info.id = 'resultInfo';
                     info.className = 'share-info';
                     info.textContent = infoText;
                     info.style.top = (btn.offsetTop + btn.offsetHeight + 6) + 'px';
@@ -1342,8 +1342,8 @@
         function setupRounds() {
             let sorted;
             if (sortMode === 'scientific') sorted = plants.slice().sort((a,b)=>a.scientific.localeCompare(b.scientific));
-            else if (sortMode === 'german') sorted = plants.slice().sort((a,b)=>a.german.localeCompare(b.scientific));
-            else if (sortMode === 'family') sorted = plants.slice().sort((a,b)=>a.family.localeCompare(b.scientific));
+            else if (sortMode === 'german') sorted = plants.slice().sort((a,b)=>stripGermanPrefix(a.german).localeCompare(stripGermanPrefix(b.german)));
+            else if (sortMode === 'family') sorted = plants.slice().sort((a,b)=>a.family.localeCompare(b.family));
             else if (sortMode === 'family_german') {
                 sorted = plants.slice().sort((a, b) => {
                     let famA = (a.family_german && a.family_german.length) ? a.family_german[0] : '';
@@ -1425,6 +1425,10 @@
         // Hilfsfunktion zum Scrollen nach ganz oben
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'auto' });
+        }
+        // Hilfsfunktion: Ignoriere Präfixe für die Sortierung im Deutschen
+        function stripGermanPrefix(str) {
+            return (str || '').replace(/^(Artengruppe|Sektion|Gattung|Untergattung)\s+/i, '').trim();
         }
     </script>
 </body>

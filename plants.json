@@ -588,6 +588,18 @@
         ]
     },
     {
+        "scientific": "Crepis capillaris",
+        "german": "Kleinköpfiger Pippau",
+        "family": "Asteraceae",
+        "family_german": [
+            "Korbblütler"
+        ],
+        "images": [
+            "crepis_capillaris1.jpg",
+            "crepis_capillaris2.jpg"
+        ]
+    },
+    {
         "scientific": "Cynosurus cristatus",
         "german": "Weide-Kammgras",
         "family": "Poaceae",
@@ -621,6 +633,30 @@
         "images": [
             "daucus_carota1.jpg",
             "daucus_carota2.jpg"
+        ]
+    },
+    {
+        "scientific": "Dianthus carthusianorum",
+        "german": "Kartäuser-Nelke",
+        "family": "Caryophyllaceae",
+        "family_german": [
+            "Nelkengewächse"
+        ],
+        "images": [
+            "dianthus_carthusianorum1.jpg",
+            "dianthus_carthusianorum2.jpg"
+        ]
+    },
+    {
+        "scientific": "Echium vulgare",
+        "german": "Gewöhnlicher Natternkopf",
+        "family": "Boraginaceae",
+        "family_german": [
+            "Raublattgewächse"
+        ],
+        "images": [
+            "echium_vulgare1.jpg",
+            "echium_vulgare2.jpg"
         ]
     },
     {
@@ -1020,6 +1056,18 @@
         ]
     },
     {
+        "scientific": "Lactuca serriola",
+        "german": "Kompass-Lattich",
+        "family": "Asteraceae",
+        "family_german": [
+            "Korbblütler"
+        ],
+        "images": [
+            "lactuca_serriola1.jpg",
+            "lactuca_serriola2.jpg"
+        ]
+    },
+    {
         "scientific": "Lapsana communis",
         "german": "Gewöhnlicher Rainkohl",
         "family": "Asteraceae",
@@ -1101,6 +1149,18 @@
         "images": [
             "ligustrum_vulgare1.jpg",
             "ligustrum_vulgare2.jpg"
+        ]
+    },
+    {
+        "scientific": "Linaria vulgaris agg.",
+        "german": "Artengruppe Gewöhnliches Leinkraut",
+        "family": "Plantaginaceae",
+        "family_german": [
+            "Wegerichgewächse"
+        ],
+        "images": [
+            "linaria_vulgaris1.jpg",
+            "linaria_vulgaris2.jpg"
         ]
     },
     {
@@ -1248,6 +1308,18 @@
         ]
     },
     {
+        "scientific": "Melissa officinalis",
+        "german": "Zitronen-Melisse",
+        "family": "Lamiaceae",
+        "family_german": [
+            "Lippenblütler"
+        ],
+        "images": [
+            "melissa_officinalis1.jpg",
+            "melissa_officinalis2.jpg"
+        ]
+    },
+    {
         "scientific": "Oenothera",
         "german": "Gattung Nachtkerzen",
         "family": "Onagraceae",
@@ -1320,8 +1392,20 @@
         ]
     },
     {
+        "scientific": "Pimpinella saxifraga agg.",
+        "german": "Artengruppe Kleine Pimpinelle",
+        "family": "Apiaceae",
+        "family_german": [
+            "Doldenblütler"
+        ],
+        "images": [
+            "pimpinella_saxifraga1.jpg",
+            "pimpinella_saxifraga2.jpg"
+        ]
+    },
+    {
         "scientific": "Pinus sylvestris",
-        "german": "Wald-Kiefer",
+        "german": "Gewöhnliche Kiefer",
         "family": "Pinaceae",
         "family_german": [
             "Kieferngewächse"
@@ -1449,6 +1533,18 @@
         "images": [
             "potentilla_sterilis1.jpg",
             "potentilla_sterilis2.jpg"
+        ]
+    },
+    {
+        "scientific": "Prunella vulgaris",
+        "german": "Gewöhnliche Braunelle",
+        "family": "Lamiaceae",
+        "family_german": [
+            "Lippenblütler"
+        ],
+        "images": [
+            "prunella_vulgaris1.jpg",
+            "prunella_vulgaris2.jpg"
         ]
     },
     {
@@ -1668,6 +1764,18 @@
         ]
     },
     {
+        "scientific": "Rosa spinosissima",
+        "german": "Pimpinell-Rose",
+        "family": "Rosaceae",
+        "family_german": [
+            "Rosengewächse"
+        ],
+        "images": [
+            "rosa_spinosissima1.jpg",
+            "rosa_spinosissima2.jpg"
+        ]
+    },
+    {
         "scientific": "Rubus caesius",
         "german": "Kratzbeere",
         "family": "Rosaceae",
@@ -1765,7 +1873,7 @@
     },
     {
         "scientific": "Securigera varia",
-        "german": "Bunte Kronwicke",
+        "german": "Bunte Beilwicke",
         "family": "Fabaceae",
         "family_german": [
             "Schmetterlingsblütler"
@@ -1785,6 +1893,18 @@
         "images": [
             "senecio_erucifolius1.jpg",
             "senecio_erucifolius2.jpg"
+        ]
+    },
+    {
+        "scientific": "Silene vulgaris",
+        "german": "Gewöhnliches Leimkraut",
+        "family": "Caryophyllaceae",
+        "family_german": [
+            "Nelkengewächse"
+        ],
+        "images": [
+            "silene_vulgaris1.jpg",
+            "silene_vulgaris2.jpg"
         ]
     },
     {
@@ -1910,13 +2030,37 @@
     {
         "scientific": "Valerianella locusta",
         "german": "Gewöhnliches Rapünzchen",
-        "family": "Valerianaceae",
+        "family": "Caprifoliaceae",
         "family_german": [
-            "Baldriangewächse"
+            "Geißblattgewächse"
         ],
         "images": [
             "valerianella_locusta1.jpg",
             "valerianella_locusta2.jpg"
+        ]
+    },
+    {
+        "scientific": "Verbascum thapsus agg.",
+        "german": "Artengruppe Kleinblütige Königskerze",
+        "family": "Scrophulariaceae",
+        "family_german": [
+            "Braunwurzgewächse"
+        ],
+        "images": [
+            "verbascum_thapsus1.jpg",
+            "verbascum_thapsus2.jpg"
+        ]
+    },
+    {
+        "scientific": "Verbena officinalis",
+        "german": "Echtes Eisenkraut",
+        "family": "Verbenaceae",
+        "family_german": [
+            "Eisenkrautgewächse"
+        ],
+        "images": [
+            "verbena_officinalis1.jpg",
+            "verbena_officinalis2.jpg"
         ]
     },
     {

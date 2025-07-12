@@ -132,6 +132,18 @@
         ]
     },
     {
+        "scientific": "Allium schoenoprasum",
+        "german": "Schnittlauch",
+        "family": "Amaryllidaceae",
+        "family_german": [
+            "Amaryllisgewächse"
+        ],
+        "images": [
+            "allium_schoenoprasum1.jpg",
+            "allium_schoenoprasum2.jpg"
+        ]
+    },
+    {
         "scientific": "Alopecurus pratensis agg.",
         "german": "Artengruppe Wiesen-Fuchsschwanz",
         "family": "Poaceae",
@@ -273,6 +285,18 @@
         "images": [
             "bromus_erectus1.jpg",
             "bromus_erectus2.jpg"
+        ]
+    },
+    {
+        "scientific": "Bunias orientalis",
+        "german": "Orientalische Zackenschote",
+        "family": "Brassicaceae",
+        "family_german": [
+            "Kreuzblütler"
+        ],
+        "images": [
+            "bunias_orientalis1.jpg",
+            "bunias_orientalis2.jpg"
         ]
     },
     {
@@ -1164,6 +1188,18 @@
         ]
     },
     {
+        "scientific": "Lonicera caprifolium",
+        "german": "Echtes Geißblatt",
+        "family": "Caprifoliaceae",
+        "family_german": [
+            "Geißblattgewächse"
+        ],
+        "images": [
+            "lonicera_caprifolium1.jpg",
+            "lonicera_caprifolium2.jpg"
+        ]
+    },
+    {
         "scientific": "Lonicera pileata",
         "german": "Immergrüne Kriech-Heckenkirsche",
         "family": "Caprifoliaceae",
@@ -1896,6 +1932,18 @@
         ]
     },
     {
+        "scientific": "Senecio jacobaea",
+        "german": "Jakobs-Greiskraut",
+        "family": "Asteraceae",
+        "family_german": [
+            "Korbblütler"
+        ],
+        "images": [
+            "senecio_jacobaea1.jpg",
+            "senecio_jacobaea2.jpg"
+        ]
+    },
+    {
         "scientific": "Silene vulgaris",
         "german": "Gewöhnliches Leimkraut",
         "family": "Caryophyllaceae",
@@ -1968,6 +2016,30 @@
         ]
     },
     {
+        "scientific": "Torilis japonica agg.",
+        "german": "Artengruppe Gewöhnlicher Klettenkerbel",
+        "family": "Apiaceae",
+        "family_german": [
+            "Doldenblütler"
+        ],
+        "images": [
+            "torilis_japonica1.jpg",
+            "torilis_japonica2.jpg"
+        ]
+    },
+    {
+        "scientific": "Trifolium medium",
+        "german": "Zickzack-Klee",
+        "family": "Fabaceae",
+        "family_german": [
+            "Schmetterlingsblütler"
+        ],
+        "images": [
+            "trifolium_medium1.jpg",
+            "trifolium_medium2.jpg"
+        ]
+    },
+    {
         "scientific": "Trifolium pratense",
         "german": "Rot-Klee",
         "family": "Fabaceae",
@@ -2001,6 +2073,18 @@
         "images": [
             "trisetum_flavescens1.jpg",
             "trisetum_flavescens2.jpg"
+        ]
+    },
+    {
+        "scientific": "Ulmus minor agg.",
+        "german": "Artengruppe Feld-Ulme",
+        "family": "Ulmaceae",
+        "family_german": [
+            "Ulmengewächse"
+        ],
+        "images": [
+            "ulmus_minor1.jpg",
+            "ulmus_minor2.jpg"
         ]
     },
     {

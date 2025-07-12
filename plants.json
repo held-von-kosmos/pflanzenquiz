@@ -504,8 +504,8 @@
         ]
     },
     {
-        "scientific": "Cornus alba agg.",
-        "german": "Artengruppe Tatarischer Hartriegel",
+        "scientific": "Cornus alba",
+        "german": "Tatarischer Hartriegel",
         "family": "Cornaceae",
         "family_german": [
             "Hartriegelgewächse"
@@ -1452,8 +1452,8 @@
         ]
     },
     {
-        "scientific": "Poa annua",
-        "german": "Einjähriges Rispengras",
+        "scientific": "Poa annua agg.",
+        "german": "Artengruppe Einjähriges Rispengras",
         "family": "Poaceae",
         "family_german": [
             "Süßgräser"
@@ -2136,8 +2136,8 @@
         ]
     },
     {
-        "scientific": "Viola reichenbachiana",
-        "german": "Wald-Veilchen",
+        "scientific": "Viola reichenbachiana agg.",
+        "german": "Artengruppe Hain-Veilchen",
         "family": "Violaceae",
         "family_german": [
             "Veilchengewächse"

@@ -312,6 +312,18 @@
         ]
     },
     {
+        "scientific": "Calamagrostis epigejos",
+        "german": "Sand-Reitgras",
+        "family": "Poaceae",
+        "family_german": [
+            "Süßgräser"
+        ],
+        "images": [
+            "calamagrostis_epigejos1.jpg",
+            "calamagrostis_epigejos2.jpg"
+        ]
+    },
+    {
         "scientific": "Calystegia sepium agg.",
         "german": "Artengruppe Gewöhnliche Zaunwinde",
         "family": "Convolvulaceae",
@@ -477,6 +489,18 @@
         "images": [
             "cerastium_fontanum1.jpg",
             "cerastium_fontanum2.jpg"
+        ]
+    },
+    {
+        "scientific": "Chenopodium polyspermum",
+        "german": "Vielsamiger Gänsefuß",
+        "family": "Amaranthaceae",
+        "family_german": [
+            "Fuchsschwanzgewächse"
+        ],
+        "images": [
+            "chenopodium_polyspermum1.jpg",
+            "chenopodium_polyspermum2.jpg"
         ]
     },
     {
@@ -669,6 +693,18 @@
         "images": [
             "dianthus_carthusianorum1.jpg",
             "dianthus_carthusianorum2.jpg"
+        ]
+    },
+    {
+        "scientific": "Echinochloa crus-galli",
+        "german": "Gewöhnliche Hühnerhirse",
+        "family": "Poaceae",
+        "family_german": [
+            "Süßgräser"
+        ],
+        "images": [
+            "echinochloa_crus-galli1.jpg",
+            "echinochloa_crus-galli2.jpg"
         ]
     },
     {
@@ -1344,6 +1380,18 @@
         ]
     },
     {
+        "scientific": "Melilotus albus",
+        "german": "Weißer Steinklee",
+        "family": "Fabaceae",
+        "family_german": [
+            "Schmetterlingsblütler"
+        ],
+        "images": [
+            "melilotus_albus1.jpg",
+            "melilotus_albus2.jpg"
+        ]
+    },
+    {
         "scientific": "Melissa officinalis",
         "german": "Zitronen-Melisse",
         "family": "Lamiaceae",
@@ -1365,6 +1413,18 @@
         "images": [
             "oenothera1.jpg",
             "oenothera2.jpg"
+        ]
+    },
+    {
+        "scientific": "Oxalis dillenii",
+        "german": "Dillenius-Sauerklee",
+        "family": "Oxalidaceae",
+        "family_german": [
+            "Sauerkleegewächse"
+        ],
+        "images": [
+            "oxalis_dillenii1.jpg",
+            "oxalis_dillenii2.jpg"
         ]
     },
     {
@@ -1593,6 +1653,18 @@
         "images": [
             "prunus_avium1.jpg",
             "prunus_avium2.jpg"
+        ]
+    },
+    {
+        "scientific": "Prunus cerasifera",
+        "german": "Kirsch-Pflaume",
+        "family": "Rosaceae",
+        "family_german": [
+            "Rosengewächse"
+        ],
+        "images": [
+            "prunus_cerasifera1.jpg",
+            "prunus_cerasifera2.jpg"
         ]
     },
     {
@@ -1884,6 +1956,18 @@
         ]
     },
     {
+        "scientific": "Salix cinerea",
+        "german": "Grau-Weide",
+        "family": "Salicaceae",
+        "family_german": [
+            "Weidengewächse"
+        ],
+        "images": [
+            "salix_cinerea1.jpg",
+            "salix_cinerea2.jpg"
+        ]
+    },
+    {
         "scientific": "Salix triandra",
         "german": "Mandel-Weide",
         "family": "Salicaceae",
@@ -1917,6 +2001,18 @@
         "images": [
             "securigera_varia1.jpg",
             "securigera_varia2.jpg"
+        ]
+    },
+    {
+        "scientific": "Senecio aquaticus agg.",
+        "german": "Artengruppe Wasser-Greiskraut",
+        "family": "Asteraceae",
+        "family_german": [
+            "Korbblütler"
+        ],
+        "images": [
+            "senecio_aquaticus1.jpg",
+            "senecio_aquaticus2.jpg"
         ]
     },
     {
@@ -1968,6 +2064,18 @@
         ]
     },
     {
+        "scientific": "Sonchus oleraceus",
+        "german": "Kohl-Gänsedistel",
+        "family": "Asteraceae",
+        "family_german": [
+            "Korbblütler"
+        ],
+        "images": [
+            "sonchus_oleraceus1.jpg",
+            "sonchus_oleraceus2.jpg"
+        ]
+    },
+    {
         "scientific": "Sorbus aucuparia",
         "german": "Eberesche",
         "family": "Rosaceae",
@@ -2004,15 +2112,15 @@
         ]
     },
     {
-        "scientific": "Tilia platyphyllos",
-        "german": "Sommer-Linde",
+        "scientific": "Tilia cordata",
+        "german": "Winter-Linde",
         "family": "Malvaceae",
         "family_german": [
             "Malvengewächse"
         ],
         "images": [
-            "tilia_platyphyllos1.jpg",
-            "tilia_platyphyllos2.jpg"
+            "tilia_cordata1.jpg",
+            "tilia_cordata2.jpg"
         ]
     },
     {

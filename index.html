@@ -1,4 +1,4 @@
-<!-- Skript erstellt von Aaron Tholl in Visual Studio Code, Stand 2025-07-17 -->
+<!-- Skript erstellt von Aaron Tholl in Visual Studio Code, Stand 2025-07-27 -->
 
 <!DOCTYPE html>
 <html lang="de">
@@ -505,10 +505,10 @@
         function normalize(str) {
             // Entferne Abkürzungen aus wissenschaftlichen Namen und Präfixe aus deutschen Namen
             return (str || '')
-                // Entferne "agg.", "sect.", "subg." (wiss. Name)
-                .replace(/\b(agg\.?|sect\.?|subg\.?)\b/gi, '')
-                // Entferne "Artengruppe", "Sektion", "Untergattung", "Gattung" (dt. Name)
-                .replace(/\b(Artengruppe|Sektion|Untergattung|Gattung)\b/gi, '')
+                // Entferne "subg.", "agg.", "sect.", "s. l.", "s. str.", "nom. cons. prop.", "nom. cons.", "nom. rej. prop." (wiss. Name)
+                .replace(/\b(subg\.?|agg\.?|sect\.?|s\.?\s*l\.?|s\.?\s*str\.?|nom\.?\s*cons\.?\s*prop\.?|nom\.?\s*cons\.?|nom\.?\s*rej\.?\s*prop\.?)\b/gi, '')
+                // Entferne "Gattung", "Untergattung", "Artengruppe", "Sektion" (dt. Name)
+                .replace(/\b(Gattung|Untergattung|Artengruppe|Sektion)\b/gi, '')
                 .toLowerCase()
                 .replace(/[\s\-äöüß]/g, s => ({
                     'ä':'ae','ö':'oe','ü':'ue','ß':'ss',' ':'','-':''
@@ -539,7 +539,7 @@
         }
         // Hilfsfunktion zum Formatieren der wissenschaftlichen Namen
         function formatScientificName(name) {
-            const abbrPattern = /^(agg\.?|sect\.?|subg\.?)$/i;
+            const abbrPattern = /^(agg\.?|sect\.?|subg\.?|s\.?|l\.?|str\.?|nom\.?|cons\.?|prop\.?|rej\.?)$/i;
             return name
                 .split(/\s+/)
                 .map(word => abbrPattern.test(word) ? `<span class="no-italic">${word}</span>` : `<i>${word}</i>`)
@@ -1028,6 +1028,15 @@
             saveState('pflanzenquiz_state', quizState);
         }
 
+        function prependGermanPrefix(name) {
+            if (!name) return '';
+            const match = name.match(/^(.+)\s+\((Gattung|Untergattung|Artengruppe|Sektion)\)$/i);
+            if (match) {
+                return `${match[2]} ${match[1]}`;
+            }
+            return name;
+        }
+
         function checkAnswer(plant, input) {
             let sci = normalize(input.scientific);
             let ger = normalize(input.german);
@@ -1055,14 +1064,14 @@
                     (sciOk && ger && (!gerOk || gerTypo)) ||
                     (gerOk && sci && (!sciOk || sciTypo))
                 )) {
-                return `☑️ Teilweise richtig! Die Pflanze heißt: <b><span class="scientific-name">${formatScientificName(plant.scientific)}</span> (${plant.german}), ${plant.family} (${(plant.family_german||[]).join(', ')})</b>`;
+                return `☑️ Teilweise richtig! Die Pflanze heißt: <b><span class="scientific-name">${formatScientificName(plant.scientific)}</span> (${prependGermanPrefix(plant.german)}), ${plant.family} (${(plant.family_german||[]).join(', ')})</b>`;
             }
 
             // Richtig: Name 1 oder 2 oder beide stimmen, Familie stimmt, Name 2 ist korrekt oder leer
             if (famOk && (
                     (sciOk && (!ger || gerOk)) ||
                     (gerOk && (!sci || sciOk)))) {
-                return `✅ Richtig! Die Pflanze heißt: <b><span class="scientific-name">${formatScientificName(plant.scientific)}</span> (${plant.german}), ${plant.family} (${(plant.family_german||[]).join(', ')})</b>`;
+                return `✅ Richtig! Die Pflanze heißt: <b><span class="scientific-name">${formatScientificName(plant.scientific)}</span> (${prependGermanPrefix(plant.german)}), ${plant.family} (${(plant.family_german||[]).join(', ')})</b>`;
             }
 
             // Tippfehler: Namen oder Familie oder beide enthalten Tippfehler
@@ -1074,13 +1083,13 @@
 
             // Falsch: Kein Name oder Familie stimmt
             if (sci || ger || fam) {
-                return `❌ Falsch! Richtig wäre: <b><span class="scientific-name">${formatScientificName(plant.scientific)}</span> (${plant.german}), ${plant.family} (${(plant.family_german||[]).join(', ')})</b>`;
+                return `❌ Falsch! Richtig wäre: <b><span class="scientific-name">${formatScientificName(plant.scientific)}</span> (${prependGermanPrefix(plant.german)}), ${plant.family} (${(plant.family_german||[]).join(', ')})</b>`;
             }
             return '';
         }
 
         function solutionText(plant) {
-            return `ℹ️ Die Pflanze heißt: <b><span class="scientific-name">${formatScientificName(plant.scientific)}</span> (${plant.german}), ${plant.family} (${(plant.family_german||[]).join(', ')})</b>`;
+            return `ℹ️ Die Pflanze heißt: <b><span class="scientific-name">${formatScientificName(plant.scientific)}</span> (${prependGermanPrefix(plant.german)}), ${plant.family} (${(plant.family_german||[]).join(', ')})</b>`;
         }
 
         function countRoundCorrect(roundIdx) {

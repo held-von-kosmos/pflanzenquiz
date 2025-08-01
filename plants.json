@@ -49,7 +49,7 @@
     },
     {
         "scientific": "Achillea millefolium agg.",
-        "german": "Artengruppe Gewöhnliche Schafgarbe",
+        "german": "Gewöhnliche Schafgarbe (Artengruppe)",
         "family": "Asteraceae",
         "family_german": [
             "Korbblütler"
@@ -97,7 +97,7 @@
     },
     {
         "scientific": "Agrostis stolonifera agg.",
-        "german": "Artengruppe Weißes Straußgras",
+        "german": "Weißes Straußgras (Artengruppe)",
         "family": "Poaceae",
         "family_german": [
             "Süßgräser"
@@ -109,7 +109,7 @@
     },
     {
         "scientific": "Ajuga reptans",
-        "german": "Kriechender Günsel",
+        "german": "Kriech-Günsel",
         "family": "Lamiaceae",
         "family_german": [
             "Lippenblütler"
@@ -121,7 +121,7 @@
     },
     {
         "scientific": "Alliaria petiolata",
-        "german": "Knoblauchsrauke",
+        "german": "Lauchhederich",
         "family": "Brassicaceae",
         "family_german": [
             "Kreuzblütler"
@@ -144,8 +144,8 @@
         ]
     },
     {
-        "scientific": "Alopecurus pratensis agg.",
-        "german": "Artengruppe Wiesen-Fuchsschwanz",
+        "scientific": "Alopecurus pratensis",
+        "german": "Wiesen-Fuchsschwanz",
         "family": "Poaceae",
         "family_german": [
             "Süßgräser"
@@ -169,7 +169,7 @@
     },
     {
         "scientific": "Anthoxanthum odoratum agg.",
-        "german": "Artengruppe Gewöhnliches Ruchgras",
+        "german": "Gewöhnliches Ruchgras (Artengruppe)",
         "family": "Poaceae",
         "family_german": [
             "Süßgräser"
@@ -192,8 +192,8 @@
         ]
     },
     {
-        "scientific": "Arum maculatum agg.",
-        "german": "Artengruppe Gefleckter Aronstab",
+        "scientific": "Arum maculatum s. str.",
+        "german": "Gefleckter Aronstab",
         "family": "Araceae",
         "family_german": [
             "Aronstabgewächse"
@@ -241,7 +241,7 @@
     },
     {
         "scientific": "Brachypodium pinnatum agg.",
-        "german": "Artengruppe Fieder-Zwenke",
+        "german": "Fieder-Zwenke (Artengruppe)",
         "family": "Poaceae",
         "family_german": [
             "Süßgräser"
@@ -276,8 +276,8 @@
         ]
     },
     {
-        "scientific": "Bromus erectus agg.",
-        "german": "Artengruppe Aufrechte Trespe",
+        "scientific": "Bromus erectus",
+        "german": "Aufrechte Trespe",
         "family": "Poaceae",
         "family_german": [
             "Süßgräser"
@@ -324,8 +324,8 @@
         ]
     },
     {
-        "scientific": "Calystegia sepium agg.",
-        "german": "Artengruppe Gewöhnliche Zaunwinde",
+        "scientific": "Calystegia sepium",
+        "german": "Gewöhnliche Zaunwinde",
         "family": "Convolvulaceae",
         "family_german": [
             "Windengewächse"
@@ -409,7 +409,7 @@
     },
     {
         "scientific": "Carex muricata agg.",
-        "german": "Artengruppe Sparrige Segge",
+        "german": "Sparrige Segge (Artengruppe)",
         "family": "Cyperaceae",
         "family_german": [
             "Sauergräser"
@@ -469,7 +469,7 @@
     },
     {
         "scientific": "Centaurea jacea agg.",
-        "german": "Artengruppe Wiesen-Flockenblume",
+        "german": "Wiesen-Flockenblume (Artengruppe)",
         "family": "Asteraceae",
         "family_german": [
             "Korbblütler"
@@ -481,7 +481,7 @@
     },
     {
         "scientific": "Cerastium fontanum agg.",
-        "german": "Artengruppe Quellen-Hornkraut",
+        "german": "Quellen-Hornkraut (Artengruppe)",
         "family": "Caryophyllaceae",
         "family_german": [
             "Nelkengewächse"
@@ -588,7 +588,7 @@
         ]
     },
     {
-        "scientific": "Crataegus laevigata",
+        "scientific": "Crataegus laevigata s. l.",
         "german": "Zweigriffliger Weißdorn",
         "family": "Rosaceae",
         "family_german": [
@@ -612,8 +612,8 @@
         ]
     },
     {
-        "scientific": "Crataegus rhipidophylla agg.",
-        "german": "Artengruppe Großkelchiger Weißdorn",
+        "scientific": "Crataegus rhipidophylla s. l.",
+        "german": "Krummkelchiger Großkelch-Weißdorn",
         "family": "Rosaceae",
         "family_german": [
             "Rosengewächse"
@@ -661,7 +661,7 @@
     },
     {
         "scientific": "Dactylis glomerata agg.",
-        "german": "Artengruppe Gewöhnliches Knäuelgras",
+        "german": "Gewöhnliches Knaulgras (Artengruppe)",
         "family": "Poaceae",
         "family_german": [
             "Süßgräser"
@@ -673,7 +673,7 @@
     },
     {
         "scientific": "Daucus carota",
-        "german": "Wilde Möhre",
+        "german": "Gewöhnliche Möhre",
         "family": "Apiaceae",
         "family_german": [
             "Doldenblütler"
@@ -720,7 +720,7 @@
         ]
     },
     {
-        "scientific": "Elymus repens",
+        "scientific": "Elymus repens s. str.",
         "german": "Gewöhnliche Quecke",
         "family": "Poaceae",
         "family_german": [
@@ -733,7 +733,7 @@
     },
     {
         "scientific": "Epilobium hirsutum",
-        "german": "Zottiges Weidenröschen",
+        "german": "Behaartes Weidenröschen",
         "family": "Onagraceae",
         "family_german": [
             "Nachtkerzengewächse"
@@ -816,7 +816,7 @@
         ]
     },
     {
-        "scientific": "Festuca pratensis",
+        "scientific": "Festuca pratensis s. str.",
         "german": "Wiesen-Schwingel",
         "family": "Poaceae",
         "family_german": [
@@ -828,8 +828,8 @@
         ]
     },
     {
-        "scientific": "Ficaria verna",
-        "german": "Scharbockskraut",
+        "scientific": "Ficaria verna s. str.",
+        "german": "Knöllchen-Scharbockskraut",
         "family": "Ranunculaceae",
         "family_german": [
             "Hahnenfußgewächse"
@@ -877,7 +877,7 @@
     },
     {
         "scientific": "Galeobdolon luteum agg.",
-        "german": "Artengruppe Echte Goldnessel",
+        "german": "Echte Goldnessel (Artengruppe)",
         "family": "Lamiaceae",
         "family_german": [
             "Lippenblütler"
@@ -889,7 +889,7 @@
     },
     {
         "scientific": "Galeopsis tetrahit agg.",
-        "german": "Artengruppe Stechender Hohlzahn",
+        "german": "Stechender Hohlzahn (Artengruppe)",
         "family": "Lamiaceae",
         "family_german": [
             "Lippenblütler"
@@ -900,8 +900,8 @@
         ]
     },
     {
-        "scientific": "Galium aparine agg.",
-        "german": "Artengruppe Kletten-Labkraut",
+        "scientific": "Galium aparine",
+        "german": "Kletten-Labkraut",
         "family": "Rubiaceae",
         "family_german": [
             "Rötegewächse"
@@ -913,7 +913,7 @@
     },
     {
         "scientific": "Galium mollugo agg.",
-        "german": "Artengruppe Wiesen-Labkraut",
+        "german": "Wiesen-Labkraut (Artengruppe)",
         "family": "Rubiaceae",
         "family_german": [
             "Rötegewächse"
@@ -937,7 +937,7 @@
     },
     {
         "scientific": "Galium verum agg.",
-        "german": "Artengruppe Echtes Labkraut",
+        "german": "Echtes Labkraut (Artengruppe)",
         "family": "Rubiaceae",
         "family_german": [
             "Rötegewächse"
@@ -961,7 +961,7 @@
     },
     {
         "scientific": "Geranium robertianum agg.",
-        "german": "Artengruppe Stinkender Storchschnabel",
+        "german": "Stink-Storchschnabel (Artengruppe)",
         "family": "Geraniaceae",
         "family_german": [
             "Storchschnabelgewächse"
@@ -996,8 +996,8 @@
         ]
     },
     {
-        "scientific": "Glechoma hederacea agg.",
-        "german": "Artengruppe Gewöhnlicher Gundermann",
+        "scientific": "Glechoma hederacea",
+        "german": "Gewöhnlicher Gundermann",
         "family": "Lamiaceae",
         "family_german": [
             "Lippenblütler"
@@ -1033,7 +1033,7 @@
     },
     {
         "scientific": "Hieracium subg. Pilosella",
-        "german": "Untergattung Mausohr-Habichtskräuter",
+        "german": "Mausohr-Habichtskräuter",
         "family": "Asteraceae",
         "family_german": [
             "Korbblütler"
@@ -1104,8 +1104,8 @@
         ]
     },
     {
-        "scientific": "Knautia arvensis agg.",
-        "german": "Artengruppe Wiesen-Witwenblume",
+        "scientific": "Knautia arvensis s. str.",
+        "german": "Wiesen-Witwenblume",
         "family": "Caprifoliaceae",
         "family_german": [
             "Geißblattgewächse"
@@ -1189,7 +1189,7 @@
     },
     {
         "scientific": "Leucanthemum vulgare agg.",
-        "german": "Artengruppe Wiesen-Margerite",
+        "german": "Wiesen-Margerite (Artengruppe)",
         "family": "Asteraceae",
         "family_german": [
             "Korbblütler"
@@ -1213,7 +1213,7 @@
     },
     {
         "scientific": "Linaria vulgaris agg.",
-        "german": "Artengruppe Gewöhnliches Leinkraut",
+        "german": "Gewöhnliches Leinkraut (Artengruppe)",
         "family": "Plantaginaceae",
         "family_german": [
             "Wegerichgewächse"
@@ -1237,7 +1237,7 @@
     },
     {
         "scientific": "Lonicera pileata",
-        "german": "Immergrüne Kriech-Heckenkirsche",
+        "german": "Filzhut-Heckenkirsche",
         "family": "Caprifoliaceae",
         "family_german": [
             "Geißblattgewächse"
@@ -1261,7 +1261,7 @@
     },
     {
         "scientific": "Lotus corniculatus agg.",
-        "german": "Artengruppe Gewöhnlicher Hornklee",
+        "german": "Gewöhnlicher Hornklee (Artengruppe)",
         "family": "Fabaceae",
         "family_german": [
             "Schmetterlingsblütler"
@@ -1273,7 +1273,7 @@
     },
     {
         "scientific": "Luzula campestris agg.",
-        "german": "Artengruppe Gewöhnliche Hainsimse",
+        "german": "Gewöhnliche Hainsimse (Artengruppe)",
         "family": "Juncaceae",
         "family_german": [
             "Binsengewächse"
@@ -1332,15 +1332,15 @@
         ]
     },
     {
-        "scientific": "Malus sylvestris agg.",
-        "german": "Artengruppe Holz-Apfel",
+        "scientific": "Malus pumila nom. rej. prop.",
+        "german": "Kultur-Apfel",
         "family": "Rosaceae",
         "family_german": [
             "Rosengewächse"
         ],
         "images": [
-            "malus_sylvestris1.jpg",
-            "malus_sylvestris2.jpg"
+            "malus_pumila1.jpg",
+            "malus_pumila2.jpg"
         ]
     },
     {
@@ -1357,7 +1357,7 @@
     },
     {
         "scientific": "Medicago sativa agg.",
-        "german": "Artengruppe Luzerne",
+        "german": "Luzerne (Artengruppe)",
         "family": "Fabaceae",
         "family_german": [
             "Schmetterlingsblütler"
@@ -1405,7 +1405,7 @@
     },
     {
         "scientific": "Oenothera",
-        "german": "Gattung Nachtkerzen",
+        "german": "Nachtkerzen",
         "family": "Onagraceae",
         "family_german": [
             "Nachtkerzengewächse"
@@ -1465,7 +1465,7 @@
     },
     {
         "scientific": "Phyteuma spicatum agg.",
-        "german": "Artengruppe Ährige Teufelskralle",
+        "german": "Ährige Teufelskralle (Artengruppe)",
         "family": "Campanulaceae",
         "family_german": [
             "Glockenblumengewächse"
@@ -1488,8 +1488,8 @@
         ]
     },
     {
-        "scientific": "Pimpinella saxifraga agg.",
-        "german": "Artengruppe Kleine Pimpinelle",
+        "scientific": "Pimpinella saxifraga",
+        "german": "Kleine Pimpinelle",
         "family": "Apiaceae",
         "family_german": [
             "Doldenblütler"
@@ -1525,7 +1525,7 @@
     },
     {
         "scientific": "Plantago major agg.",
-        "german": "Artengruppe Breit-Wegerich",
+        "german": "Breit-Wegerich (Artengruppe)",
         "family": "Plantaginaceae",
         "family_german": [
             "Wegerichgewächse"
@@ -1536,8 +1536,8 @@
         ]
     },
     {
-        "scientific": "Plantago media agg.",
-        "german": "Artengruppe Mittlerer Wegerich",
+        "scientific": "Plantago media",
+        "german": "Mittel-Wegerich",
         "family": "Plantaginaceae",
         "family_german": [
             "Wegerichgewächse"
@@ -1549,7 +1549,7 @@
     },
     {
         "scientific": "Poa annua agg.",
-        "german": "Artengruppe Einjähriges Rispengras",
+        "german": "Einjähriges Rispengras (Artengruppe)",
         "family": "Poaceae",
         "family_german": [
             "Süßgräser"
@@ -1572,7 +1572,7 @@
         ]
     },
     {
-        "scientific": "Poa trivialis",
+        "scientific": "Poa trivialis s. l.",
         "german": "Gewöhnliches Rispengras",
         "family": "Poaceae",
         "family_german": [
@@ -1668,7 +1668,7 @@
         ]
     },
     {
-        "scientific": "Prunus domestica",
+        "scientific": "Prunus domestica s. l.",
         "german": "Zwetschge",
         "family": "Rosaceae",
         "family_german": [
@@ -1716,7 +1716,7 @@
         ]
     },
     {
-        "scientific": "Prunus spinosa",
+        "scientific": "Prunus spinosa s. str.",
         "german": "Schlehe",
         "family": "Rosaceae",
         "family_german": [
@@ -1740,8 +1740,8 @@
         ]
     },
     {
-        "scientific": "Quercus petraea agg.",
-        "german": "Artengruppe Trauben-Eiche",
+        "scientific": "Quercus petraea",
+        "german": "Trauben-Eiche",
         "family": "Fagaceae",
         "family_german": [
             "Buchengewächse"
@@ -1764,8 +1764,8 @@
         ]
     },
     {
-        "scientific": "Ranunculus acris agg.",
-        "german": "Artengruppe Scharfer Hahnenfuß",
+        "scientific": "Ranunculus acris",
+        "german": "Scharfer Hahnenfuß",
         "family": "Ranunculaceae",
         "family_german": [
             "Hahnenfußgewächse"
@@ -1836,7 +1836,7 @@
         ]
     },
     {
-        "scientific": "Rosa canina",
+        "scientific": "Rosa canina s. l.",
         "german": "Hunds-Rose",
         "family": "Rosaceae",
         "family_german": [
@@ -1860,8 +1860,8 @@
         ]
     },
     {
-        "scientific": "Rosa rubiginosa agg.",
-        "german": "Artengruppe Wein-Rose",
+        "scientific": "Rosa rubiginosa",
+        "german": "Wein-Rose",
         "family": "Rosaceae",
         "family_german": [
             "Rosengewächse"
@@ -1897,7 +1897,7 @@
     },
     {
         "scientific": "Rubus sect. Rubus",
-        "german": "Sektion Echte Brombeeren",
+        "german": "Echte Brombeeren (Sektion)",
         "family": "Rosaceae",
         "family_german": [
             "Rosengewächse"
@@ -1908,7 +1908,7 @@
         ]
     },
     {
-        "scientific": "Rumex acetosa",
+        "scientific": "Rumex acetosa nom. cons.",
         "german": "Wiesen-Sauer-Ampfer",
         "family": "Polygonaceae",
         "family_german": [
@@ -1932,7 +1932,7 @@
         ]
     },
     {
-        "scientific": "Salix alba",
+        "scientific": "Salix alba nom. cons.",
         "german": "Silber-Weide",
         "family": "Salicaceae",
         "family_german": [
@@ -1956,7 +1956,7 @@
         ]
     },
     {
-        "scientific": "Salix cinerea",
+        "scientific": "Salix cinerea s. l.",
         "german": "Grau-Weide",
         "family": "Salicaceae",
         "family_german": [
@@ -1980,7 +1980,7 @@
         ]
     },
     {
-        "scientific": "Sanguisorba minor",
+        "scientific": "Sanguisorba minor s. l.",
         "german": "Kleiner Wiesenknopf",
         "family": "Rosaceae",
         "family_german": [
@@ -2004,8 +2004,8 @@
         ]
     },
     {
-        "scientific": "Senecio aquaticus agg.",
-        "german": "Artengruppe Wasser-Greiskraut",
+        "scientific": "Senecio aquaticus s. str.",
+        "german": "Wasser-Greiskraut",
         "family": "Asteraceae",
         "family_german": [
             "Korbblütler"
@@ -2077,7 +2077,7 @@
     },
     {
         "scientific": "Sorbus aucuparia",
-        "german": "Eberesche",
+        "german": "Gewöhnliche Vogelbeere",
         "family": "Rosaceae",
         "family_german": [
             "Rosengewächse"
@@ -2089,7 +2089,7 @@
     },
     {
         "scientific": "Taraxacum sect. Ruderalia",
-        "german": "Sektion Wiesen-Löwenzähne",
+        "german": "Wiesen-Löwenzähne (Sektion)",
         "family": "Asteraceae",
         "family_german": [
             "Korbblütler"
@@ -2100,8 +2100,8 @@
         ]
     },
     {
-        "scientific": "Thymus pulegioides agg.",
-        "german": "Artengruppe Arznei-Thymian",
+        "scientific": "Thymus pulegioides s. l.",
+        "german": "Arznei-Thymian",
         "family": "Lamiaceae",
         "family_german": [
             "Lippenblütler"
@@ -2112,7 +2112,7 @@
         ]
     },
     {
-        "scientific": "Tilia cordata",
+        "scientific": "Tilia cordata nom. cons. prop.",
         "german": "Winter-Linde",
         "family": "Malvaceae",
         "family_german": [
@@ -2124,8 +2124,8 @@
         ]
     },
     {
-        "scientific": "Torilis japonica agg.",
-        "german": "Artengruppe Gewöhnlicher Klettenkerbel",
+        "scientific": "Torilis japonica",
+        "german": "Gewöhnlicher Klettenkerbel",
         "family": "Apiaceae",
         "family_german": [
             "Doldenblütler"
@@ -2172,8 +2172,8 @@
         ]
     },
     {
-        "scientific": "Trisetum flavescens agg.",
-        "german": "Artengruppe Wiesen-Goldhafer",
+        "scientific": "Trisetum flavescens",
+        "german": "Gold-Grannenhafer",
         "family": "Poaceae",
         "family_german": [
             "Süßgräser"
@@ -2184,8 +2184,8 @@
         ]
     },
     {
-        "scientific": "Ulmus minor agg.",
-        "german": "Artengruppe Feld-Ulme",
+        "scientific": "Ulmus minor",
+        "german": "Feld-Ulme",
         "family": "Ulmaceae",
         "family_german": [
             "Ulmengewächse"
@@ -2196,7 +2196,7 @@
         ]
     },
     {
-        "scientific": "Urtica dioica",
+        "scientific": "Urtica dioica s. l.",
         "german": "Große Brennnessel",
         "family": "Urticaceae",
         "family_german": [
@@ -2209,7 +2209,7 @@
     },
     {
         "scientific": "Valeriana officinalis agg.",
-        "german": "Artengruppe Arznei-Baldrian",
+        "german": "Arznei-Baldrian (Artengruppe)",
         "family": "Caprifoliaceae",
         "family_german": [
             "Geißblattgewächse"
@@ -2232,8 +2232,8 @@
         ]
     },
     {
-        "scientific": "Verbascum thapsus agg.",
-        "german": "Artengruppe Kleinblütige Königskerze",
+        "scientific": "Verbascum thapsus",
+        "german": "Kleinblütige Königskerze",
         "family": "Scrophulariaceae",
         "family_german": [
             "Braunwurzgewächse"
@@ -2256,8 +2256,8 @@
         ]
     },
     {
-        "scientific": "Veronica chamaedrys agg.",
-        "german": "Artengruppe Gamander-Ehrenpreis",
+        "scientific": "Veronica chamaedrys s. str.",
+        "german": "Gamander-Ehrenpreis",
         "family": "Plantaginaceae",
         "family_german": [
             "Wegerichgewächse"
@@ -2328,15 +2328,15 @@
         ]
     },
     {
-        "scientific": "Viola reichenbachiana agg.",
-        "german": "Artengruppe Hain-Veilchen",
+        "scientific": "Viola riviniana agg.",
+        "german": "Hain-Veilchen (Artengruppe)",
         "family": "Violaceae",
         "family_german": [
             "Veilchengewächse"
         ],
         "images": [
-            "viola_reichenbachiana1.jpg",
-            "viola_reichenbachiana2.jpg"
+            "viola_riviniana1.jpg",
+            "viola_riviniana2.jpg"
         ]
     }
 ]
